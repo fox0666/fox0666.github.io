@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="light" lang="zh-CN">
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -16,8 +16,8 @@
 <meta property="og:description" content="亲爱的朋友：​
 &emsp;&emsp;当指尖轻触键盘，第一行文字落在屏幕的瞬间，窗外的梧桐正与春风私语，叶片翻动如翻动一本未写满的诗集。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://fox0666.github.io/post/ni-hao-%EF%BC%8C-zhe-li-shi-%20%5B-sui-guang-ji-%5D%20-%20-yi-ge-guan-yu-tan-suo-%E3%80%81-fen-xiang-yu-cheng-chang-de-jing-shen-jiao-luo.html">
-<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<meta property="og:url" content="http://blog.meekdai.com/post/ni-hao-%EF%BC%8C-zhe-li-shi-%20%5B-sui-guang-ji-%5D%20-%20-yi-ge-guan-yu-tan-suo-%E3%80%81-fen-xiang-yu-cheng-chang-de-jing-shen-jiao-luo.html">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg">
 <title>你好，这里是 [碎光集] | 一个关于探索、分享与成长的精神角落</title>
 
 
@@ -53,7 +53,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     <div id="header">
 <h1 class="postTitle">你好，这里是 [碎光集] | 一个关于探索、分享与成长的精神角落</h1>
 <div class="title-right">
-    <a href="https://fox0666.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+    <a href="http://blog.meekdai.com" id="buttonHome" class="btn btn-invisible circle" title="首页">
         <svg class="octicon" width="16" height="16">
             <path id="pathHome" fill-rule="evenodd"></path>
         </svg>
@@ -108,14 +108,11 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
   此刻的我，如同在沙滩上绘制地图的旅者，满心期待地看着这片精神疆域渐具雏形。我不知道它终将长成参天大树还是别致花园，但我确信，每一次点击带来的热度、每一条留言蕴含的温度、每一次分享传递的广度，都会让它拥有独一无二的生长轨迹。​<br>
   最后，以诗人鲁米的诗句与你共勉：「当你开始走向自己，全世界都会为你让路。」很高兴能在 2025 年的春天与你相遇，愿此后的日子里，我们能在文字中汲取向上的力量，在彼此的陪伴中成为更辽阔的自己。​<br>
   期待下次更新时，能与你在文字里重逢～</p></div>
-<div style="font-size:small;margin-top:8px;float:right;"></div>
-
-<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
-<div class="comments" id="comments"></div>
+<div style="font-size:small;margin-top:8px;float:right;">转载请注明出处</div>
 
 </div>
-    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://fox0666.github.io">Blog Title</a></div>
-<div id="footer2">
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="http://blog.meekdai.com">碎光集</a></div>
+<div id="footer2"><span id="filingNum"><a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20023628号</a> • </span>
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
 
@@ -123,8 +120,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("02/16/2015"!=""){
+    var startSite=new Date("02/16/2015");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -169,41 +166,6 @@ document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
 
 
 
-function openComments(){
-    cm=document.getElementById("comments");
-    cmButton=document.getElementById("cmButton");
-    cmButton.innerHTML="loading";
-    span=document.createElement("span");
-    span.setAttribute("class","AnimatedEllipsis");
-    cmButton.appendChild(span);
-
-    script=document.createElement("script");
-    script.setAttribute("src","https://utteranc.es/client.js");
-    script.setAttribute("repo","fox0666/fox0666.github.io");
-    script.setAttribute("issue-term","title");
-    
-    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
-    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
-    else{script.setAttribute("theme","preferred-color-scheme");}
-    
-    script.setAttribute("crossorigin","anonymous");
-    script.setAttribute("async","");
-    cm.appendChild(script);
-
-    int=self.setInterval("iFrameLoading()",200);
-}
-
-function iFrameLoading(){
-    var utterances=document.getElementsByClassName('utterances');
-    if(utterances.length==1){
-        if(utterances[0].style.height!=""){
-            utterancesLoad=1;
-            int=window.clearInterval(int);
-            document.getElementById("cmButton").style.display="none";
-            console.log("utterances Load OK");
-        }
-    }
-}
 
 
 
