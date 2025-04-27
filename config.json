@@ -30,6 +30,7 @@
 "showPostSource":1,
 "rssSplit":"sentence",
 "bottomText":"💖收集生活细碎微光，让日常成为可触摸的诗",
+  "footerText": "勇往直前🔍",
 "ogImage":"https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
 "primerCSS":"<link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />",
 "needComment":1
