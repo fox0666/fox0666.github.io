@@ -14,7 +14,7 @@
 "iconList":{"music":"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
 "exlink":{"music":"https://music.meekdai.com"},
 "commentLabelColor":"#C0C0C0",
-"yearColorList":["#32CD32","#52E352""#16B316","#32CD32"],
+"yearColorList":["#808000"],
 "i18n":"CN",
 "UTC":8,
 "themeMode":"manual",
