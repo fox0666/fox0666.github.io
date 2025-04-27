@@ -8,7 +8,7 @@
 "faviconUrl":"https://fox0666.github.io/myblog.svg",
 "email":"",
 "startSite":"04/27/2025",
-"filingNum":"• 一起在平凡里拾光✨",
+"filingNum":"",
 "onePageListNum":10,
 "singlePage":["about"],
 "iconList":{"music":"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
@@ -30,7 +30,7 @@
 "showPostSource":1,
 "rssSplit":"sentence",
 "bottomText":"💖收集生活细碎微光，让日常成为可触摸的诗",
-"allHead": "<style>#filingNum, #footer2 > span:nth-of-type(3){display:none !important}</style>"
+"allHead": "<style>#filingNum, #footer2 > span:nth-of-type(3){display:none !important}</style>",
 "ogImage":"https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
 "primerCSS":"<link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />",
 "needComment":1
