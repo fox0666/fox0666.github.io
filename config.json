@@ -30,7 +30,7 @@
 "showPostSource":1,
 "rssSplit":"sentence",
 "bottomText":"💖收集生活细碎微光，让日常成为可触摸的诗",
-"allHead": "<style>[id='footer2'] > span:nth-of-type(3) { opacity:0; height:0 }</style>",
+"allHead": "<style>#footer2 > span:nth-of-type(3){display:none} #filingNum a::after{content:none !important}</style>",
 "ogImage":"https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
 "primerCSS":"<link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />",
 "needComment":1
