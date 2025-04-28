@@ -21,7 +21,7 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style": "",
+    "style": "<style>@font-face {font-family: 'CustomFont';src: url('https://cdn.jsdmirror.com/gh/lxgw/975maru@master/TTF%20SC/975MaruSC-Bold.ttf') format('truetype');}#postBody {font-family: CustomFont;}</style>",
     "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
