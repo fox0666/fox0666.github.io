@@ -45,7 +45,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 }
 
 </style>
-html, body { height: 100%; margin: 0; padding: 0; min-height: 100vh; background: #f0bbd2; background: radial-gradient( circle at center, rgba(240, 187, 210, 1) 20%, rgba(148, 187, 233, 1) 100% ); background-attachment: fixed; background-size: cover; background-position: center; background-repeat: no-repeat; } @supports (-webkit-background-size: cover) { html, body { -webkit-background-size: cover; } }<style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-tip {border-left-color:var(--borderColor-success-emphasis, var(--color-success-emphasis));background-color:var(--color-success-subtle);}.markdown-alert.markdown-alert-tip .markdown-alert-title {color: var(--fgColor-success,var(--color-success-fg));}</style>
+<style>@font-face {font-family: 'CustomFont';src: url('https://cdn.jsdmirror.com/gh/lxgw/975maru@master/TTF%20SC/975MaruSC-Bold.ttf') format('truetype');}#postBody {font-family: CustomFont;}</style><style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-tip {border-left-color:var(--borderColor-success-emphasis, var(--color-success-emphasis));background-color:var(--color-success-subtle);}.markdown-alert.markdown-alert-tip .markdown-alert-title {color: var(--fgColor-success,var(--color-success-fg));}</style>
 
 
 
@@ -56,12 +56,6 @@ html, body { height: 100%; margin: 0; padding: 0; min-height: 100vh; background:
     <a href="https://blog.myyyy.dpdns.org" id="buttonHome" class="btn btn-invisible circle" title="首页">
         <svg class="octicon" width="16" height="16">
             <path id="pathHome" fill-rule="evenodd"></path>
-        </svg>
-    </a>
-    
-    <a href="https://github.com/fox0666/fox0666.github.io/issues/2" target="_blank" class="btn btn-invisible circle" title="Issue">
-        <svg class="octicon" width="16" height="16">
-            <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
     </a>
     
@@ -110,8 +104,8 @@ html, body { height: 100%; margin: 0; padding: 0; min-height: 100vh; background:
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("04/27/2025"!=""){
-    var startSite=new Date("04/27/2025");
+if("05/1/2025"!=""){
+    var startSite=new Date("05/1/2025");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -152,7 +146,7 @@ console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 
 
 <script>
 document.getElementById("pathHome").setAttribute("d",IconList["home"]);
-document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
 
 
 
