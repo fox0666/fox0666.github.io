@@ -25,12 +25,34 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style":"body { height: 100%; margin: 0; padding: 0; } body { background: #f0bbd2; background: radial-gradient(circle, rgba(240, 187, 210, 1) 20%, rgba(148, 187, 233, 1) 100%); background-attachment: fixed; background-size: cover; font-family: 'Inter', sans-serif; } .article-container { background-color: rgba(255, 255, 255, 0.8); border-radius: 8px; padding: 20px; margin: 20px auto; max-width: 800px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); } .article-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 10px; } .article-content { line-height: 1.6; color: #555; }",
+    "style": "html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  
+  background: #f0bbd2;
+  background: radial-gradient(
+    circle at center,
+    rgba(240, 187, 210, 1) 20%,
+    rgba(148, 187, 233, 1) 100%
+  );
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@supports (-webkit-background-size: cover) {
+  html, body {
+    -webkit-background-size: cover;
+  }
+}",
     "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
     "indexStyle": "",
-    "indexScript": "",
+    "indexScript": "<script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>",
     "showPostSource": 1,
     "rssSplit": "sentence",
     "bottomText": "💖收集生活细碎微光，让日常成为可触摸的诗",
