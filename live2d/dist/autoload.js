@@ -1,5 +1,5 @@
 // live2d_path 参数建议使用绝对路径
-const live2d_path = "https://blog.myyyy.dpdns.org/live2d/";
+const live2d_path = "https://raw.githubusercontent.com/fox0666/fox0666.github.io/refs/heads/main/live2d/dist/live2d.min.js";
 //const live2d_path = "/live2d-widget/";
 
 // 封装异步加载资源的方法
@@ -35,7 +35,7 @@ if (screen.width >= 768) {
 		initWidget({
 			waifuPath: live2d_path + "waifu-tips.json",
 			//apiPath: "https://live2d.fghrsh.net/api/",
-			cdnPath: "https://blog.myyyy.dpdns.org/live2d/live2d_api/",
+			cdnPath: "https://fastly.jsdelivr.net/gh/fox0666/fox0666.github.io@latest/live2d/live2d_api/",
 			tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"]
 		});
 	});
