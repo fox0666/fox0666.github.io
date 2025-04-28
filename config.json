@@ -11,12 +11,8 @@
     "filingNum": "",
     "onePageListNum": 10,
     "singlePage": ["about"],
-    "iconList": {
-        "music": "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"
-    },
-    "exlink": {
-        "music": "https://music.meekdai.com"
-    },
+    "iconList": {"music": "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
+    "exlink": {"music": "https://music.meekdai.com"},
     "commentLabelColor": "#C0C0C0",
     "yearColorList": ["#808000"],
     "i18n": "CN",
@@ -25,34 +21,12 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style": "html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  
-  background: #f0bbd2;
-  background: radial-gradient(
-    circle at center,
-    rgba(240, 187, 210, 1) 20%,
-    rgba(148, 187, 233, 1) 100%
-  );
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-@supports (-webkit-background-size: cover) {
-  html, body {
-    -webkit-background-size: cover;
-  }
-}",
+    "style": "html, body { height: 100%; margin: 0; padding: 0; min-height: 100vh; background: #f0bbd2; background: radial-gradient( circle at center, rgba(240, 187, 210, 1) 20%, rgba(148, 187, 233, 1) 100% ); background-attachment: fixed; background-size: cover; background-position: center; background-repeat: no-repeat; } @supports (-webkit-background-size: cover) { html, body { -webkit-background-size: cover; } }",
     "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
     "indexStyle": "",
-    "indexScript": "<script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>",
+    "indexScript": "<script src=\"https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@master/autoload.js\"></script>",
     "showPostSource": 1,
     "rssSplit": "sentence",
     "bottomText": "💖收集生活细碎微光，让日常成为可触摸的诗",
