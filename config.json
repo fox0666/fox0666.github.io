@@ -1,37 +1,70 @@
 {
+    // 博客的主标题，会显示在页面的显著位置
     "title":"碎光集",
+    // 博客描述与自述，用于让访客快速了解博客的核心内容与定位
     "subTitle":"收集生活中散落的灵感碎片，将日常的细微感动、思考的闪光照亮成文字",
+    // 博客头像的链接地址，用于在页面上展示博客的视觉标识
     "avatarUrl":"https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427195840.jpg",
+    // Gmeek 的版本，这里使用 'last' 表示采用最新版本
     "GMEEK_VERSION":"last",
+    // 显示在头像后面的标题，若与 'title' 一致可省略
     "displayTitle":"思维的流萤掠过心野🪄",
-"homeUrl":"https://blog.myyyy.dpdns.org",
-"faviconUrl":"https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427200437.png",
-"email":"",
-"startSite":"04/27/2025",
-"filingNum":"",
-"onePageListNum":10,
-"singlePage":["about"],
-"iconList":{"music":"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
-"exlink":{"music":"https://music.meekdai.com"},
-"commentLabelColor":"#C0C0C0",
-"yearColorList":["#808000"],
-"i18n":"CN",
-"UTC":8,
-"themeMode":"manual",
-"dayTheme":"light",
-"nightTheme":"dark_colorblind",
-"urlMode":"pinyin",
-"style":"",
-"script":"<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
-"head":"",
-"allHead":"",
-"indexStyle":"",
-"indexScript":"",
-"showPostSource":1,
-"rssSplit":"sentence",
-"bottomText":"💖收集生活细碎微光，让日常成为可触摸的诗",
-"allHead": "<style>#footer2{display:none}</style>",
-"ogImage":"https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
-"primerCSS":"<link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />",
-"needComment":1
+    // 博客的主页地址，可使用自定义域名
+    "homeUrl":"https://blog.myyyy.dpdns.org",
+    // 页面的favicon图标链接，若与 'avatarUrl' 一致可省略
+    "faviconUrl":"https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427200437.png",
+    // 用于自动提交仓库时的邮箱地址，可留空
+    "email":"",
+    // 网站开始运行的日期，用于计算并在页面底部显示网站运行天数
+    "startSite":"04/27/2025",
+    // 网站的备案信息，会显示在页面底部，若没有则留空
+    "filingNum":"",
+    // 首页每页展示的文章数量
+    "onePageListNum":10,
+    // 自定义的独立页面，例如关于页面等
+    "singlePage":["about"],
+    // 定义 singlePage 按钮展示的 SVG 图标，这里定义了音乐图标的 SVG 路径
+    "iconList":{"music":"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
+    // 自定义首页右上角圆形按钮到外部链接的功能，这里链接到音乐网站
+    "exlink":{"music":"https://music.meekdai.com"},
+    // 自定义显示评论数量标签的颜色
+    "commentLabelColor":"#C0C0C0",
+    // 自定义显示不同年份标签的颜色
+    "yearColorList":["#808000"],
+    // 定义博客的语言，这里设置为中文
+    "i18n":"CN",
+    // 定义时区，这里使用东八区
+    "UTC":8,
+    // 定义主题模式，'manual' 表示手动切换，也可选择 'fix'
+    "themeMode":"manual",
+    // 定义亮主题的名称
+    "dayTheme":"light",
+    // 定义暗主题的名称
+    "nightTheme":"dark_colorblind",
+    // 定义文章链接的生成模式，'pinyin' 表示使用拼音生成链接
+    "urlMode":"pinyin",
+    // 自定义文章页的 CSS 样式，此处为空
+    "style":"",
+    // 引入外部 JavaScript 文件，用于在文章页实现目录功能
+    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
+    // 自定义文章页的 head 内容，此处为空
+    "head":"",
+    // 自定义所有页面的 head 内容，此处设置隐藏 id 为 'footer2' 的元素
+    "allHead": "<style>#footer2{display:none}</style>",
+    // 自定义首页的 CSS 样式，此处为空
+    "indexStyle":"",
+    // 自定义首页的 JavaScript 脚本，此处为空
+    "indexScript":"",
+    // 设置为 1 则在文章页显示 issue 链接按钮，设置为 0 则不显示
+    "showPostSource":1,
+    // 设置 RSS 输出的截断符号，'sentence' 表示取第一句话，也可配置其他特殊符号
+    "rssSplit":"sentence",
+    // 设置文章页面右下角显示的内容
+    "bottomText":"💖收集生活细碎微光，让日常成为可触摸的诗",
+    // 设置 Open Graph 协议展示的图片链接
+    "ogImage":"https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
+    // 引入 primer.css 样式文件，使用南科大的 CDN 地址
+    "primerCSS":"<link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />",
+    // 设置是否需要评论功能，1 开启评论，0 关闭
+    "needComment":1
 }
