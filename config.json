@@ -25,7 +25,7 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style": ""style": "body { height: 100%; margin: 0; padding: 0; } body { background: #f0bbd2; background: radial-gradient(circle, rgba(240, 187, 210, 1) 20%, rgba(148, 187, 233, 1) 100%); background-attachment: fixed; background-size: cover; font-family: 'Inter', sans-serif; } .article-container { background-color: rgba(255, 255, 255, 0.8); border-radius: 8px; padding: 20px; margin: 20px auto; max-width: 800px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); } .article-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 10px; } .article-content { line-height: 1.6; color: #555; }",
+    "style":"body { height: 100%; margin: 0; padding: 0; } body { background: #f0bbd2; background: radial-gradient(circle, rgba(240, 187, 210, 1) 20%, rgba(148, 187, 233, 1) 100%); background-attachment: fixed; background-size: cover; font-family: 'Inter', sans-serif; } .article-container { background-color: rgba(255, 255, 255, 0.8); border-radius: 8px; padding: 20px; margin: 20px auto; max-width: 800px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); } .article-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 10px; } .article-content { line-height: 1.6; color: #555; }",
     "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
