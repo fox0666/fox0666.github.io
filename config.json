@@ -26,7 +26,7 @@
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
     "style": "",
-    "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/refs/heads/main/live2d/dist/autoload.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/main/live2d/dist/autoload.js'></script>\n<script>\nif (window.innerWidth >= 1250) {\n    var script = document.createElement('script');\n    script.type = 'text/javascript';\n    script.src = 'https://raw.githubusercontent.com/fox0666/fox0666.github.io/main/live2d/dist/autoload.js';\n    document.body.appendChild(script);\n}\n</script>",
+    "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/main/live2d/dist/autoload.js'></script>\n<script>\nif (window.innerWidth >= 1250) {\n    var script = document.createElement('script');\n    script.type = 'text/javascript';\n    script.src = 'https://raw.githubusercontent.com/fox0666/fox0666.github.io/main/live2d/dist/autoload.js';\n    document.body.appendChild(script);\n}\n</script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
     "indexStyle": "",
