@@ -11,12 +11,8 @@
     "filingNum": "",
     "onePageListNum": 10,
     "singlePage": ["about"],
-    "iconList": {
-        "music": "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"
-    },
-    "exlink": {
-        "music": "https://music.meekdai.com"
-    },
+    "iconList": {"music": "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"},
+    "exlink": {"music": "https://music.meekdai.com"},
     "commentLabelColor": "#C0C0C0",
     "yearColorList": ["#808000"],
     "i18n": "CN",
@@ -25,10 +21,10 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style": "/* 全局背景图片（替换为你的图片链接） */ body { background-image: url(\"https://t.alcy.cc/pc\"); background-attachment: fixed; background-size: cover; background-position: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; } /* 内容容器（白色透明框，圆角，阴影） */ .container { max-width: 800px; margin: 0 auto; padding: 2rem; background: rgba(255, 255, 255, 0.95); border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); } /* 标题样式（圆滑过渡） */ h1, h2, h3 { color: #1a1a1a; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; margin-top: 2rem; } /* 链接样式（柔和颜色） */ a { color: #2c7be5; text-decoration: none; border-bottom: 1px solid rgba(44, 123, 229, 0.2); transition: color 0.3s ease; } a:hover { color: #1a5cb4; border-bottom-color: rgba(44, 123, 229, 0.4); } /* 响应式布局（移动端适配） */ @media (max-width: 768px) { .container { padding: 1rem; border-radius: 10px; } }",
-    "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/refs/heads/main/live2d/dist/autoload.js'></script>",
+    "style": ".container { max-width: 800px; margin: 0 auto; padding: 2rem; background: rgba(255, 255, 255, 0.95); border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }",
+    "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/main/live2d/dist/autoload.js'></script>",
     "head": "",
-    "allHead": "<style>#footer2{display:none} html, body { height: 100%; } body { background-image: url(\"https://t.alcy.cc/pc\"); background-size: cover; background-repeat: no-repeat; background-position: center center; }</style>",
+    "allHead": "<style>html, body { height: 100%; } body { background-image: url('https://example.com/valid-background.jpg'); background-size: cover; background-attachment: fixed; background-position: center; } #footer2 { display: none; }</style>",
     "indexStyle": "",
     "indexScript": "",
     "showPostSource": 1,
