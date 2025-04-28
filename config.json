@@ -25,7 +25,7 @@
     "dayTheme": "light",
     "nightTheme": "dark_colorblind",
     "urlMode": "pinyin",
-    "style": "html, body {\n    height: 100%;\n    margin: 0;\n}\nbody {\n    background: linear-gradient(45deg, #a8e063 0%, #56ab2f 100%);\n    background-attachment: fixed;\n    font-family: 'Inter', sans-serif;\n}\n.article-container {\n    background-color: rgba(255, 255, 255, 0.8);\n    border-radius: 8px;\n    padding: 20px;\n    margin: 20px auto;\n    max-width: 800px;\n    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);\n}\n.article-title {\n    font-size: 2rem;\n    font-weight: bold;\n    color: #333;\n    margin-bottom: 10px;\n}\n.article-content {\n    line-height: 1.6;\n    color: #555;\n}",
+  "style": "html,body{height:100%;margin:0;padding:0}body{background:linear-gradient(45deg, #a8e063 0%, #56ab2f 100%);background-attachment:fixed;background-size:cover;font-family:'Inter', sans-serif}.article-container{background-color:rgba(255, 255, 255, 0.8);border-radius:8px;padding:20px;margin:20px auto;max-width:800px;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)}.article-title{font-size:2rem;font-weight:bold;color:#333;margin-bottom:10px}.article-content{line-height:1.6;color:#555}",
     "script": "<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
     "head": "",
     "allHead": "<style>#footer2{display:none}</style>",
