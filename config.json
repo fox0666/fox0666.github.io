@@ -30,6 +30,6 @@
     "rssSplit": "sentence",
     "bottomText": "💖收集生活细碎微光，让日常成为可触摸的诗",
     "ogImage": "https://cdn.jsdelivr.net/gh/Meekdai/meekdai.github.io/logo64.jpg",
-    "primerCSS": "<link href='https://blog.369988.xyz/primer.css' rel='stylesheet' />",
+    "primerCSS": "<link href='https://blog.369988.xyz/primer.css' rel='stylesheet' /><link href='https://blog.369988.xyz/spoiler.css' rel='stylesheet' />",
     "needComment": 1
 }
