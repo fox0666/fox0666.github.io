@@ -46,7 +46,7 @@
     // 自定义文章页的 CSS 样式，此处为空
     "style":"",
     // 引入外部 JavaScript 文件，用于在文章页实现目录功能
-    "script":"<script src='https://raw.githubusercontent.com/fox0666/Gmeek-backup/refs/heads/main/plugins/GmeekTOC.js'></script>",
+    "script":"<script src='https://raw.githubusercontent.com/fox0666/Gmeek-backup/refs/heads/main/plugins/GmeekTOC.js'></script><script src='https://raw.githubusercontent.com/fox0666/fox0666.github.io/refs/heads/main/live2d/dist/autoload.js'></script>",
     // 自定义文章页的 head 内容，此处为空
     "head":"",
     // 自定义所有页面的 head 内容，此处设置隐藏 id 为 'footer2' 的元素
