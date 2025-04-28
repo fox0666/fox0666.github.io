@@ -1,50 +1,10 @@
-/* ======================================
- * 剧透框样式 - Spoiler Component
- * 功能：模糊文本效果，悬停显示清晰内容
- * 作者：Your Name
- * 日期：2025-04-28
- ====================================== */
-
-/* 基础剧透框样式 */
-.spoiler {
-    /* 布局与定位 */
-    position: relative;
-    display: inline-block; /* 支持行内块元素，可包裹文本 */
-    vertical-align: middle; /* 垂直居中对齐 */
-    
-    /* 视觉效果 */
-    background-color: rgba(200, 200, 200, 0.3); /* 浅灰色半透明背景 */
-    color: rgba(0, 0, 0, 0.5); /* 半透明黑色文字 */
-    border-radius: 4px; /* 圆角边框（可选，提升视觉友好度） */
-    padding: 5px 10px; /* 内边距（水平方向增加空间） */
-    
-    /* 交互效果 */
-    user-select: none; /* 禁止文本选中 */
-    cursor: pointer; /* 悬停时显示手型图标 */
-    filter: blur(3px); /* 初始模糊效果 */
-    transition: all 0.3s ease; /* 全属性过渡（包含背景/颜色/模糊等） */
-    
-    /* 溢出处理 */
-    overflow: hidden; /* 隐藏溢出内容（配合伪元素时可能需要） */
+.hidden-text {
+    color: transparent;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
 }
 
-/* 悬停状态 - 显示清晰内容 */
-.spoiler:hover {
-    background-color: inherit; /* 继承父元素背景色（更灵活适配） */
-    color: inherit; /* 继承父元素文字颜色 */
-    filter: blur(0); /* 移除模糊效果 */
-    
-    /* 可选增强效果（可根据需求开启） */
-    /* box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);  轻微阴影提升层次感 */
-    /* transform: scale(1.02);  轻微缩放动画 */
-}
-
-/* ======================================
- * 使用说明：
- * 1. 在 HTML 中添加类名：<span class="spoiler">需要隐藏的内容</span>
- * 2. 可通过修改以下属性自定义风格：
- *    - background-color: 调整背景色（支持十六进制/rgba/预设值）
- *    - filter: 调整初始模糊程度（单位：px，0为不模糊）
- *    - transition: 调整动画时长和曲线（如 0.5s ease-in-out）
- *    - border-radius: 调整圆角大小（如 8px 更圆润）
- ====================================== */
+.hidden-text:hover {
+    color: inherit;
+    text-shadow: none;
+}    
