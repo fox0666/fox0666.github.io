@@ -1,0 +1,12 @@
+{
+    "models": [
+        "KantaiCollection/murakumo",
+        "bilibili-live/22",
+        "bilibili-live/33"
+    ],
+    "messages": [
+        "艦隊これくしょん / 叢雲(むらくも)",
+        "来自 Bilibili Live 的 22 哦 ~💕",
+        "来自 Bilibili Live 的 33 哦 ~💖"
+    ]
+}
