@@ -1,14 +1,14 @@
 #waifu-toggle {
     background-color: #E8F5E9;
     border-radius: 5px;
-    bottom: calc(15vw + 20px);
+    bottom: calc(15vw + 10px);
     color: #fff;
     cursor: pointer;
-    font-size: 12px;
+    font-size: clamp(10px, 2vw, 12px);
     left: 50%;
     margin-left: 0;
     transform: translateX(-50%);
-    padding: 5px 10px;
+    padding: clamp(3px, 1vw, 5px) clamp(6px, 2vw, 10px);
     position: fixed;
     transition: margin-left 1s;
     width: auto;
@@ -48,17 +48,17 @@
     border: 1px solid rgba(224, 186, 140, .62);
     border-radius: 12px;
     box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
-    font-size: 14px;
-    line-height: 24px;
-    margin: -30px 20px;
-    min-height: 70px;
+    font-size: clamp(12px, 2vw, 14px);
+    line-height: clamp(18px, 3vw, 24px);
+    margin: -10% 5%;
+    min-height: auto;
     opacity: 0;
     overflow: hidden;
-    padding: 5px 10px;
+    padding: clamp(3px, 1vw, 5px) clamp(6px, 2vw, 10px);
     position: absolute;
     text-overflow: ellipsis;
     transition: opacity 1s;
-    width: 250px;
+    width: clamp(150px, 30vw, 250px);
     word-break: break-all;
 }
 
