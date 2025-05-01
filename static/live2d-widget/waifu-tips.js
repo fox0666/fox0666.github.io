@@ -1,8 +1,7 @@
 /*!
  * Live2D Widget
- * https://github.com/stevenjoezhang/live2d-widget
- */
-!(function () {
+ * https://github.com/linji1/live2d
+ */ !(function () {
     'use strict';
     function e(e) {
         return Array.isArray(e) ? e[Math.floor(Math.random() * e.length)] : e;
@@ -40,32 +39,34 @@
                 loadlive2d('live2d', `${this.cdnPath}model/${o}/index.json`);
             } else loadlive2d('live2d', `${this.apiPath}get/?id=${t}-${s}`), console.log(`Live2D 模型 ${t}-${s} 加载完成`);
         }
-async loadRandModel() {
-    const t = localStorage.getItem('modelId'),
-        s = localStorage.getItem('modelTexturesId');
-    const newClothesMessages = [
+       async loadRandModel() {
+    const t = localStorage.getItem('modelId');
+    const s = localStorage.getItem('modelTexturesId');
+    const funnyMessages = [
         '我的新衣服好看嘛？',
-        '哇，我这新造型是不是超炫！',
-        '瞧瞧我这身新行头，是不是眼前一亮？',
-        '我这新衣服有没有戳中你的审美呀？',
-        '感觉穿上新衣服，我都更有活力啦，好看不？'
+        '哇塞，我这新衣服简直是时尚界的宠儿！',
+        '瞧瞧我这新造型，是不是能让你眼前一亮呀？',
+        '嘿嘿，我换上这新衣服，感觉自己都能去走秀啦！',
+        '哟呵，这新衣服一穿，我瞬间魅力值爆棚啦，咋样？',
+        '哇哦，我这新衣服有没有让你感受到时尚的冲击呀？'
     ];
+
     if (this.useCDN) {
         this.modelList || (await this.loadModelList());
-        const s = e(this.modelList.models[t]);
-        loadlive2d('live2d', `${this.cdnPath}model/${s}/index.json`);
-        o(e(newClothesMessages), 4e3, 10);
+        const randomModel = e(this.modelList.models[t]);
+        loadlive2d('live2d', `${this.cdnPath}model/${randomModel}/index.json`);
+        o(e(funnyMessages), 4e3, 10);
     } else {
         fetch(`${this.apiPath}rand_textures/?id=${t}-${s}`)
-           .then(e => e.json())
-           .then(e => {
-                if (1 !== e.textures.id || (1 !== s && 0 !== s)) {
-                    this.loadModel(t, e.textures.id, e(newClothesMessages));
+           .then(response => response.json())
+           .then(data => {
+                if (1!== data.textures.id || (1!== s && 0!== s)) {
+                    this.loadModel(t, data.textures.id, e(funnyMessages));
                 } else {
                     o('我还没有其他衣服呢！', 4e3, 10);
                 }
             });
-        }
+    }
         async loadOtherModel() {
             let e = localStorage.getItem('modelId');
             if (this.useCDN) {
@@ -74,8 +75,8 @@ async loadRandModel() {
                 this.loadModel(t, 0, this.modelList.messages[t]);
             } else
                 fetch(`${this.apiPath}switch/?id=${e}`)
-                   .then(e => e.json())
-                   .then(e => {
+                    .then(e => e.json())
+                    .then(e => {
                         this.loadModel(e.model.id, 0, e.model.message);
                     });
         }
@@ -83,25 +84,25 @@ async loadRandModel() {
     const n = {
         hitokoto: {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>',
-            callback: function () {
-                fetch('https://v1.hitokoto.cn')
-                   .then(e => e.json())
-                   .then(e => {
-                        const funReplies = [
-                            `哎呀，这句话被你发现啦！是不是很有韵味~`,
-                            `这句一言超有感觉的，快说说你读到时的心情！`,
-                            `哇塞，这句话简直说到心坎里了，收藏起来吧～`,
-                            `悄悄告诉你，这句台词可是我精心为你挑选的哦✨`,
-                            `嗯～这句话背后一定有个有趣的故事吧？`,
-                            `读这句话的时候，有没有联想到某个人或事呀？`
-                        ];
-                        o(e.hitokoto, 6e3, 9);
-                        setTimeout(() => {
-                            o(e(funReplies), 4e3, 9);
-                        }, 6e3);
-                    });
-            }
-        },
+    callback: function () {
+        fetch('https://v1.hitokoto.cn')
+           .then(e => e.json())
+           .then(e => {
+                const funReplies = [
+                    `这句超有感觉的话，可是我特意为你挑的哦～`,
+                    `读完这句话，有没有觉得今天的心情都变好了呀？`,
+                    `悄悄告诉你，这句话的背后可能藏着一个小故事呢～`,
+                    `哇！这句话和你的气质超搭的，有没有觉得？`,
+                    `每次看到这句话，都感觉像在和你说悄悄话～`,
+                    `这句话有没有让你想起某个人或某个特别的时刻呀？`
+                ];
+                o(e.hitokoto, 3e3, 9);
+                setTimeout(() => {
+                    o(e(funReplies), 4e3, 9);
+                }, 3e3);
+            });
+    }
+},
         asteroids: {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/></svg>',
             callback: () => {
@@ -123,7 +124,7 @@ async loadRandModel() {
         photo: {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M220.6 121.2L271.1 96 448 96v96H333.2c-21.9-15.1-48.5-24-77.2-24s-55.2 8.9-77.2 24H64V128H192c9.9 0 19.7-2.3 28.6-6.8zM0 128V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H271.1c-9.9 0-19.7 2.3-28.6 6.8L192 64H160V48c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16l0 16C28.7 64 0 92.7 0 128zM168 304a88 88 0 1 1 176 0 88 88 0 1 1 -176 0z"/></svg>',
             callback: () => {
-                o('照好了嘛，是不是很可爱呢？', 6e3, 9), (Live2D.captureName = 'photo.png'), (Live2D.captureFrame = !0);
+                o('咔嚓！这张照片里的我简直萌翻啦，你觉得呢？', 6e3, 9), (Live2D.captureName = 'photo.png'), (Live2D.captureFrame = !0);
             }
         },
         info: {
@@ -136,7 +137,7 @@ async loadRandModel() {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg>',
             callback: () => {
                 localStorage.setItem('waifu-display', Date.now()),
-                    o('愿你有一天能与重要的人重逢。', 2e3, 11),
+                    o('生活偶尔会有离别，但一定会安排你们再次相遇，愿那份久别重逢的喜悦，治愈所有等待。', 2e3, 11),
                     (document.getElementById('waifu').style.bottom = '-500px'),
                     setTimeout(() => {
                         (document.getElementById('waifu').style.display = 'none'), document.getElementById('waifu-toggle').classList.add('waifu-toggle-active');
@@ -155,11 +156,11 @@ async loadRandModel() {
                 window.addEventListener('keydown', () => (i = !0)),
                 setInterval(() => {
                     i
-                      ? ((i = !1), clearInterval(s), (s = null))
-                      : s ||
-                        (s = setInterval(() => {
-                            o(c, 6e3, 9);
-                        }, 2e4));
+                        ? ((i = !1), clearInterval(s), (s = null))
+                        : s ||
+                          (s = setInterval(() => {
+                              o(c, 6e3, 9);
+                          }, 2e4));
                 }, 1e3),
                 o(
                     (function (e) {
@@ -239,8 +240,8 @@ async loadRandModel() {
                 null === e && ((e = 0), (o = 53)),
                     i.loadModel(e, o),
                     fetch(t.waifuPath)
-                       .then(e => e.json())
-                       .then(c);
+                        .then(e => e.json())
+                        .then(c);
             })();
     }
     window.initWidget = function (e, t) {
@@ -249,18 +250,18 @@ async loadRandModel() {
         o.addEventListener('click', () => {
             o.classList.remove('waifu-toggle-active'),
                 o.getAttribute('first-time')
-                  ? (i(e), o.removeAttribute('first-time'))
-                  : (localStorage.removeItem('waifu-display'),
-                    (document.getElementById('waifu').style.display = ''),
-                    setTimeout(() => {
-                        document.getElementById('waifu').style.bottom = 0;
-                    }, 0));
+                    ? (i(e), o.removeAttribute('first-time'))
+                    : (localStorage.removeItem('waifu-display'),
+                      (document.getElementById('waifu').style.display = ''),
+                      setTimeout(() => {
+                          document.getElementById('waifu').style.bottom = 0;
+                      }, 0));
         }),
             localStorage.getItem('waifu-display') && Date.now() - localStorage.getItem('waifu-display') <= 864e5
-              ? (o.setAttribute('first-time', !0),
-                setTimeout(() => {
-                    o.classList.add('waifu-toggle-active');
-                }, 0))
-              : i(e);
+                ? (o.setAttribute('first-time', !0),
+                  setTimeout(() => {
+                      o.classList.add('waifu-toggle-active');
+                  }, 0))
+                : i(e);
     };
 })();
