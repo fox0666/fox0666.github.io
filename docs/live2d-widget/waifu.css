@@ -13,7 +13,7 @@
   /* 核心：固定宽度并保持比例 */
   width: 200px; /* 基础宽度（可根据需要调整，如150px/250px） */
   height: auto; /* 自动保持宽高比，避免拉伸 */
-  transform: scale(1); /* 原始比例，如需整体缩放可调整（如0.9） */
+  transform: scale(1.25); /* 原始比例，如需整体缩放可调整（如0.9） */
   transform-origin: left bottom; /* 缩放原点：左下角（关键） */
   cursor: grab;
   position: relative;
