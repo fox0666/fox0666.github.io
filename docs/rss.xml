@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>碎光集</title><link>https://blog.369988.xyz</link><description>收集生活中散落的灵感碎片，将日常的细微感动、思考的闪光照亮成文字</description><copyright>碎光集</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427195840.jpg</url><title>avatar</title><link>https://blog.369988.xyz</link></image><lastBuildDate>Thu, 01 May 2025 03:36:23 +0000</lastBuildDate><managingEditor>碎光集</managingEditor><ttl>60</ttl><webMaster>碎光集</webMaster><item><title>你好，这里是 [碎光集] | 一个关于探索、分享与成长的精神角落</title><link>https://blog.369988.xyz/post/ni-hao-%EF%BC%8C-zhe-li-shi-%20%5B-sui-guang-ji-%5D%20-%20-yi-ge-guan-yu-tan-suo-%E3%80%81-fen-xiang-yu-cheng-chang-de-jing-shen-jiao-luo.html</link><description>亲爱的朋友：​
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>碎光集</title><link>https://blog.369988.xyz</link><description>收集生活中散落的灵感碎片，将日常的细微感动、思考的闪光照亮成文字</description><copyright>碎光集</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427195840.jpg</url><title>avatar</title><link>https://blog.369988.xyz</link></image><lastBuildDate>Thu, 01 May 2025 03:46:55 +0000</lastBuildDate><managingEditor>碎光集</managingEditor><ttl>60</ttl><webMaster>碎光集</webMaster><item><title>你好，这里是 [碎光集] | 一个关于探索、分享与成长的精神角落</title><link>https://blog.369988.xyz/post/ni-hao-%EF%BC%8C-zhe-li-shi-%20%5B-sui-guang-ji-%5D%20-%20-yi-ge-guan-yu-tan-suo-%E3%80%81-fen-xiang-yu-cheng-chang-de-jing-shen-jiao-luo.html</link><description>亲爱的朋友：​
 &amp;emsp;&amp;emsp;当指尖轻触键盘，第一行文字落在屏幕的瞬间，窗外的梧桐正与春风私语，叶片翻动如翻动一本未写满的诗集。</description><guid isPermaLink="true">https://blog.369988.xyz/post/ni-hao-%EF%BC%8C-zhe-li-shi-%20%5B-sui-guang-ji-%5D%20-%20-yi-ge-guan-yu-tan-suo-%E3%80%81-fen-xiang-yu-cheng-chang-de-jing-shen-jiao-luo.html</guid><pubDate>Sun, 27 Apr 2025 03:34:36 +0000</pubDate></item><item><title>灵魂小抄</title><link>https://blog.369988.xyz/about.html</link><description>### 使用特殊技巧
 **空格**
 &amp;emsp;&amp;emsp;要想打出两个空格，使用以下符号：
@@ -9,8 +9,8 @@
 
 **诗词图片调用**
 ```
-![今日诗词](https://v2.jinrishici.com/one.svg)
+`Gmeek-html&lt;img src='https://[v2.jinrishici.com/one.svg](https://v2.jinrishici.com/one.svg)'&gt;`
 ```
-![今日诗词](https://v2.jinrishici.com/one.svg)
+`Gmeek-html&lt;img src='https://[v2.jinrishici.com/one.svg](https://v2.jinrishici.com/one.svg)'&gt;`
 ### 使用强调信息
 &amp;emsp;&amp;emsp;在 GitHub Flavored Markdown（GFM）或支持自定义标签的平台中，可通过特定语法添加可视化警示块，提升内容可读性。</description><guid isPermaLink="true">https://blog.369988.xyz/about.html</guid><pubDate>Tue, 29 Apr 2025 12:19:53 +0000</pubDate></item></channel></rss>
