@@ -39,34 +39,20 @@
                 loadlive2d('live2d', `${this.cdnPath}model/${o}/index.json`);
             } else loadlive2d('live2d', `${this.apiPath}get/?id=${t}-${s}`), console.log(`Live2D 模型 ${t}-${s} 加载完成`);
         }
-       async loadRandModel() {
-    const t = localStorage.getItem('modelId');
-    const s = localStorage.getItem('modelTexturesId');
-    const funnyMessages = [
-        '我的新衣服好看嘛？',
-        '哇塞，我这新衣服简直是时尚界的宠儿！',
-        '瞧瞧我这新造型，是不是能让你眼前一亮呀？',
-        '嘿嘿，我换上这新衣服，感觉自己都能去走秀啦！',
-        '哟呵，这新衣服一穿，我瞬间魅力值爆棚啦，咋样？',
-        '哇哦，我这新衣服有没有让你感受到时尚的冲击呀？'
-    ];
-
-    if (this.useCDN) {
-        this.modelList || (await this.loadModelList());
-        const randomModel = e(this.modelList.models[t]);
-        loadlive2d('live2d', `${this.cdnPath}model/${randomModel}/index.json`);
-        o(e(funnyMessages), 4e3, 10);
-    } else {
-        fetch(`${this.apiPath}rand_textures/?id=${t}-${s}`)
-           .then(response => response.json())
-           .then(data => {
-                if (1!== data.textures.id || (1!== s && 0!== s)) {
-                    this.loadModel(t, data.textures.id, e(funnyMessages));
-                } else {
-                    o('我还没有其他衣服呢！', 4e3, 10);
-                }
-            });
-    }
+        async loadRandModel() {
+            const t = localStorage.getItem('modelId'),
+                s = localStorage.getItem('modelTexturesId');
+            if (this.useCDN) {
+                this.modelList || (await this.loadModelList());
+                const s = e(this.modelList.models[t]);
+                loadlive2d('live2d', `${this.cdnPath}model/${s}/index.json`), o('我这新衣服一上身，活力直接拉满，你觉得咋样？', 4e3, 10);
+            } else
+                fetch(`${this.apiPath}rand_textures/?id=${t}-${s}`)
+                    .then(e => e.json())
+                    .then(e => {
+                        1 !== e.textures.id || (1 !== s && 0 !== s) ? this.loadModel(t, e.textures.id, '我这新衣服一上身，活力直接拉满，你觉得咋样？') : o('哟呵，我这 “衣库” 比我的钱包还干净，没别的衣服咯！', 4e3, 10);
+                    });
+        }
         async loadOtherModel() {
             let e = localStorage.getItem('modelId');
             if (this.useCDN) {
@@ -84,25 +70,18 @@
     const n = {
         hitokoto: {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>',
-    callback: function () {
-        fetch('https://v1.hitokoto.cn')
-           .then(e => e.json())
-           .then(e => {
-                const funReplies = [
-                    `这句超有感觉的话，可是我特意为你挑的哦～`,
-                    `读完这句话，有没有觉得今天的心情都变好了呀？`,
-                    `悄悄告诉你，这句话的背后可能藏着一个小故事呢～`,
-                    `哇！这句话和你的气质超搭的，有没有觉得？`,
-                    `每次看到这句话，都感觉像在和你说悄悄话～`,
-                    `这句话有没有让你想起某个人或某个特别的时刻呀？`
-                ];
-                o(e.hitokoto, 3e3, 9);
-                setTimeout(() => {
-                    o(e(funReplies), 4e3, 9);
-                }, 3e3);
-            });
-    }
-},
+            callback: function () {
+                fetch('https://v1.hitokoto.cn')
+                    .then(e => e.json())
+                    .then(e => {
+                        const t = `哇塞！刚刚这句诗词就像个小惊喜，蹦进了你的世界，有没有被它的魅力迷倒呀？`;
+                        o(e.hitokoto, 6e3, 9),
+                            setTimeout(() => {
+                                o(t, 4e3, 9);
+                            }, 6e3);
+                    });
+            }
+        },
         asteroids: {
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/></svg>',
             callback: () => {
@@ -171,7 +150,7 @@
                                     n = t.split('-')[1] || s;
                                 if (s <= e.getHours() && e.getHours() <= n) return o;
                             }
-                        const t = `欢迎阅读<span>「${document.title.split(' - ')[0]}」</span>`;
+                        const t = `以文字为舟,欢迎阅读<span>「${document.title.split(' - ')[0]}」</span>`;
                         let o;
                         if ('' !== document.referrer) {
                             const e = new URL(document.referrer),
