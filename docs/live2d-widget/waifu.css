@@ -13,6 +13,7 @@
     transition: margin-left 1s;
     width: auto;
     writing-mode: horizontal-tb;
+    z-index: 998;
 }
 
 #waifu-toggle.waifu-toggle-active {
@@ -24,15 +25,16 @@
 }
 
 #waifu {
-    bottom: 0;
-    left: 0;
+    bottom: 30px; /* 增大 bottom 值，往上移动 */
+    left: 20px; /* 增大 left 值，往右移动 */
     line-height: 0;
     margin-bottom: -10px;
     position: fixed;
-    transform: translateY(3px);
+    transform: translateY(0);
     transition: transform .3s ease-in-out, bottom 3s ease-in-out;
-    z-index: 3;
+    z-index: 999;
     width: 15vw;
+    min-width: 150px;
     max-width: 300px;
     height: auto;
     transform-origin: bottom left;
@@ -60,6 +62,7 @@
     transition: opacity 1s;
     width: clamp(150px, 30vw, 250px);
     word-break: break-all;
+    z-index: 999;
 }
 
 #waifu-tips.waifu-tips-active {
@@ -91,6 +94,7 @@
     right: -10px;
     top: 70px;
     transition: opacity 1s;
+    z-index: 999;
 }
 
 #waifu:hover #waifu-tool {
