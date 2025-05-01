@@ -71,6 +71,8 @@
 	height: 300px;
 	position: relative;
 	width: 300px;
+	transform: scale(0.75);
+        transform-origin: center bottom;
 }
 
 #live2d:active {
