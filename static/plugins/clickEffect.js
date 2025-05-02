@@ -12,7 +12,9 @@ function clickEffect() {
     const waveColours = ["rgba(255, 107, 107, 0.5)", "rgba(107, 255, 182, 0.5)", "rgba(182, 107, 255, 0.5)", "rgba(255, 182, 107, 0.5)", "rgba(107, 107, 255, 0.5)"];
     const canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
-    canvas.setAttribute("style", "width: 100%; height: 100%; top: 0; left: 0; z-index: 99999; position: fixed; pointer-events: none;");
+    // 提高 z-index 的值，确保画布显示在更上层
+    canvas.setAttribute("style", "width: 100%; height: 100%; top: 0; left: 0; z-index: 999999; position: fixed; pointer-events: none;");
+
     if (canvas.getContext && window.addEventListener) {
         ctx = canvas.getContext("2d");
         updateSize();
@@ -39,6 +41,7 @@ function clickEffect() {
     } else {
         console.log("canvas or addEventListener is unsupported!");
     }
+
     function updateSize() {
         width = window.innerWidth;
         height = window.innerHeight;
@@ -56,6 +59,7 @@ function clickEffect() {
             y: height / 2
         };
     }
+
     class Shape {
         constructor(x = origin.x, y = origin.y) {
             this.x = x;
@@ -74,6 +78,7 @@ function clickEffect() {
             this.rotation = Math.random() * Math.PI * 2;
             this.rotationSpeed = (Math.random() - 0.5) * 0.1;
         }
+
         update() {
             this.x += this.vx - normal.x;
             this.y += this.vy - normal.y;
@@ -84,6 +89,7 @@ function clickEffect() {
             this.vy *= 0.98;
             this.rotation += this.rotationSpeed;
         }
+
         draw() {
             let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
             gradient.addColorStop(0, this.color);
@@ -144,6 +150,7 @@ function clickEffect() {
             ctx.fill();
         }
     }
+
     class Wave {
         constructor(x, y) {
             this.x = x;
@@ -153,25 +160,31 @@ function clickEffect() {
             this.speed = randBetween(2, 4);
             this.color = waveColours[Math.floor(Math.random() * waveColours.length)];
         }
+
         update() {
             this.r += this.speed;
             this.opacity -= 0.015;
         }
     }
+
     function pushShapes(count = 1, x = origin.x, y = origin.y) {
         for (let i = 0; i < count; i++) {
             shapes.push(new Shape(x, y));
         }
     }
+
     function createWave(x, y) {
         waves.push(new Wave(x, y));
     }
+
     function randBetween(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
     function loop() {
         ctx.fillStyle = "rgba(255, 255, 255, 0)";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         let newWaves = [];
         for (let i = 0; i < waves.length; i++) {
             let w = waves[i];
@@ -189,6 +202,7 @@ function clickEffect() {
             }
         }
         waves = newWaves;
+
         let newShapes = [];
         for (let i = 0; i < shapes.length; i++) {
             let s = shapes[i];
@@ -199,6 +213,7 @@ function clickEffect() {
             }
         }
         shapes = newShapes;
+
         if (longPressed) {
             multiplier += 0.2;
         } else if (!longPressed && multiplier >= 0) {
