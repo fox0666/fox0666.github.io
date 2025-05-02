@@ -9,72 +9,62 @@ function loadResource(type, attributes) {
 function createTOC() {
     const tocElement = document.createElement('div');
     tocElement.className = 'toc';
-    tocElement.classList.add('show');
-        
+
     const contentContainer = document.querySelector('.markdown-body');
-    contentContainer.appendChild(tocElement);
+    let headingIdCounter = 1;
 
     const headings = contentContainer.querySelectorAll('h1, h2, h3, h4, h5, h6');
     headings.forEach(heading => {
         if (!heading.id) {
-            heading.id = heading.textContent.trim().replace(/\s+/g, '-').toLowerCase();
+            const baseId = heading.textContent.trim().replace(/\s+/g, '-').toLowerCase();
+            heading.id = `${baseId}-${headingIdCounter++}`;
         }
         const link = document.createElement('a');
         link.href = '#' + heading.id;
         link.textContent = heading.textContent;
-        
         link.setAttribute('data-id', heading.id);
-        
         link.className = 'toc-link';
-        link.style.paddingLeft = `${(parseInt(heading.tagName.charAt(1)) - 1) * 10}px`;
+        const level = parseInt(heading.tagName.charAt(1), 10);
+        link.style.paddingLeft = `${(level - 1) * 10}px`;
         tocElement.appendChild(link);
     });
 
-    
-    tocElement.insertAdjacentHTML('beforeend', '<a class="toc-end" onclick="window.scrollTo({top:0,behavior: \'smooth\'});">返回顶部</a>');
+    tocElement.insertAdjacentHTML('beforeend', '<a class="toc-end" onclick="window.scrollTo({top:0,behavior:\'smooth\'});">返回顶部</a>');
     contentContainer.prepend(tocElement);
 }
 
 function highlightTOC() {
     const tocLinks = document.querySelectorAll('.toc-link');
     const fromTop = window.scrollY + 10;
-
     let currentHeading = null;
 
     tocLinks.forEach(link => {
         const section = document.getElementById(link.getAttribute('data-id'));
-        if (section && section.offsetTop <= fromTop) {
+        if (section && section.offsetTop <= fromTop && (section.offsetTop + section.offsetHeight) > fromTop) {
             currentHeading = link;
         }
     });
 
-    tocLinks.forEach(link => {
-        link.classList.remove('active-toc');
-    });
-
+    tocLinks.forEach(link => link.classList.remove('active-toc'));
     if (currentHeading) {
         currentHeading.classList.add('active-toc');
-
-        // 确保当前高亮的目录项在可视区域的中间
-        currentHeading.scrollIntoView({
-            block: 'center',   // 确保当前高亮项滚动到视图中间位置
-            inline: 'nearest'  // 可选，保持水平滚动条不动
-        });
+        currentHeading.scrollIntoView({ block: 'center', inline: 'nearest' });
     }
 }
 
 function toggleTOC() {
     const tocElement = document.querySelector('.toc');
     const tocIcon = document.querySelector('.toc-icon');
-    if (tocElement) {
+    if (tocElement && tocIcon) {
         tocElement.classList.toggle('show');
         tocIcon.classList.toggle('active');
         tocIcon.textContent = tocElement.classList.contains('show') ? '✖' : '☰';
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     createTOC();
+
     const css = `
        :root {
             --toc-bg: rgba(237, 239, 233, 0.84);
@@ -105,11 +95,13 @@ document.addEventListener("DOMContentLoaded", function() {
             transform: translateY(20px) scale(0.9);
             transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
+
         .toc.show {
             opacity: 1;
             visibility: visible;
             transform: translateY(0) scale(1);
         }
+
         .toc a {
             display: block;
             border-radius: 8px;
@@ -121,14 +113,17 @@ document.addEventListener("DOMContentLoaded", function() {
             border-bottom: 1px solid var(--toc-border);
             transition: background-color 0.2s ease, padding-left 0.2s ease;
         }
+
         .toc a:last-child {
             border-bottom: none;
         }
+
         .toc a:hover {
             background-color: var(--toc-hover);
             padding-left: 5px;
             border-radius: 8px;
         }
+
         .toc-icon {
             position: fixed;
             bottom: 20px;
@@ -151,12 +146,15 @@ document.addEventListener("DOMContentLoaded", function() {
             -webkit-tap-highlight-color: transparent;
             outline: none;
         }
+
         .toc-icon:hover {
             transform: scale(0.9);
         }
+
         .toc-icon:active {
             transform: scale(0.9);
         }
+
         .toc-icon.active {
             background-color: var(--toc-icon-active-bg);
             color: var(--toc-icon-active-color);
@@ -170,48 +168,64 @@ document.addEventListener("DOMContentLoaded", function() {
             cursor: pointer;
             visibility: hidden;
             background-color: white;
-            padding: 10px;                            /* 可选：增加一些内边距，使按钮更易点击 */
-            border-radius: 8px;                       /* 可选：使按钮有圆角 */
-            border: 1px solid var(--toc-border);      /* 可选：增加边框，使其更明显 */
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--toc-border);
         }
-        
+
         .active-toc {
             font-weight: bold;
             border-radius: 8px;
-            background-color: var(--toc-hover);  /* 根据你的设计，可以定制高亮颜色 */
-            padding-left: 5px;  /* 可选：增加左边距以突出当前项目 */
+            background-color: var(--toc-hover);
+            padding-left: 5px;
         }
     `;
-    loadResource('style', {css: css});
+    loadResource('style', { css });
 
     const tocIcon = document.createElement('div');
     tocIcon.className = 'toc-icon';
-    
-    tocIcon.classList.add('active');
-    
-    tocIcon.textContent = '✖';
+    tocIcon.textContent = '☰';
     tocIcon.onclick = (e) => {
         e.stopPropagation();
         toggleTOC();
     };
     document.body.appendChild(tocIcon);
 
-    window.onscroll = function() {
+    // 默认弹出目录
+    const tocElement = document.querySelector('.toc');
+    tocElement.classList.add('show');
+    tocIcon.classList.add('active');
+    tocIcon.textContent = '✖';
+
+    // 3 秒后隐藏目录
+    setTimeout(() => {
+        if (!tocElement.classList.contains('interacted')) {
+            tocElement.classList.remove('show');
+            tocIcon.classList.remove('active');
+            tocIcon.textContent = '☰';
+        }
+    }, 3000);
+
+    // 记录用户是否与目录交互
+    tocElement.addEventListener('mouseenter', () => {
+        tocElement.classList.add('interacted');
+    });
+
+    window.onscroll = function () {
         const backToTopButton = document.querySelector('.toc-end');
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            backToTopButton.style="visibility: visible;background-color: white;"
+            backToTopButton.style.visibility = 'visible';
         } else {
-            backToTopButton.style="visibility: hidden;background-color: white;"
+            backToTopButton.style.visibility = 'hidden';
         }
     };
 
     document.addEventListener('scroll', highlightTOC);
-    
+
     document.addEventListener('click', (e) => {
         const tocElement = document.querySelector('.toc');
-        if (tocElement && tocElement.classList.contains('show') && !tocElement.contains(e.target) && e.target.classList.contains('toc-icon')) {
+        if (tocElement && tocElement.classList.contains('show') &&!tocElement.contains(e.target) && e.target!== tocIcon) {
             toggleTOC();
-            
         }
     });
-});
+});    
