@@ -216,18 +216,12 @@
             (function () {
                 let e = localStorage.getItem('modelId'),
                     o = localStorage.getItem('modelTexturesId');
-                if (null === e) {
-                    // 假设 modelList 是已经获取到的模型列表
-                    const modelList = i.modelList || await i.loadModelList(); 
-                    const randomIndex = Math.floor(Math.random() * modelList.models.length);
-                    e = randomIndex;
-                    o = 0; // 假设默认纹理 ID 为 0
-                }
-    i.loadModel(e, o);
-    fetch(t.waifuPath)
-      .then(e => e.json())
-      .then(c);
-})();    
+                null === e && ((e = 1), (o = 53)),
+                    i.loadModel(e, o),
+                    fetch(t.waifuPath)
+                        .then(e => e.json())
+                        .then(c);
+            })();
     }
     window.initWidget = function (e, t) {
         'string' == typeof e && (e = { waifuPath: e, apiPath: t }), document.body.insertAdjacentHTML('beforeend', '<div id="waifu-toggle">\n\t\t<span>看板娘</span>\n\t\t</div>');
