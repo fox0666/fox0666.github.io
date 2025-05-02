@@ -48,8 +48,8 @@
                 loadlive2d('live2d', `${this.cdnPath}model/${s}/index.json`), o('我这新衣服一上身，活力直接拉满，你觉得咋样？', 4e3, 10);
             } else
                 fetch(`${this.apiPath}rand_textures/?id=${t}-${s}`)
-                    .then(e => e.json())
-                    .then(e => {
+                   .then(e => e.json())
+                   .then(e => {
                         1 !== e.textures.id || (1 !== s && 0 !== s) ? this.loadModel(t, e.textures.id, '我这新衣服一上身，活力直接拉满，你觉得咋样？') : o('哟呵，我这 “衣库” 比我的钱包还干净，没别的衣服咯！', 4e3, 10);
                     });
         }
@@ -61,8 +61,8 @@
                 this.loadModel(t, 0, this.modelList.messages[t]);
             } else
                 fetch(`${this.apiPath}switch/?id=${e}`)
-                    .then(e => e.json())
-                    .then(e => {
+                   .then(e => e.json())
+                   .then(e => {
                         this.loadModel(e.model.id, 0, e.model.message);
                     });
         }
@@ -72,8 +72,8 @@
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\x3c!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --\x3e<path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>',
             callback: function () {
                 fetch('https://v1.hitokoto.cn')
-                    .then(e => e.json())
-                    .then(e => {
+                   .then(e => e.json())
+                   .then(e => {
                         const t = `哇塞！刚刚这句诗词就像个小惊喜，蹦进了你的世界，有没有被它的魅力迷倒呀？`;
                         o(e.hitokoto, 6e3, 9),
                             setTimeout(() => {
@@ -135,11 +135,11 @@
                 window.addEventListener('keydown', () => (i = !0)),
                 setInterval(() => {
                     i
-                        ? ((i = !1), clearInterval(s), (s = null))
+                       ? ((i = !1), clearInterval(s), (s = null))
                         : s ||
                           (s = setInterval(() => {
-                              o(c, 6e3, 9);
-                          }, 2e4));
+                                o(c, 6e3, 9);
+                            }, 2e4));
                 }, 1e3),
                 o(
                     (function (e) {
@@ -214,13 +214,36 @@
                     }
             })(),
             (function () {
-                let e = localStorage.getItem('modelId'),
-                    o = localStorage.getItem('modelTexturesId');
-                null === e && ((e = 0), (o = 0)),
-                    i.loadModel(e, o),
-                    fetch(t.waifuPath)
-                        .then(e => e.json())
-                        .then(c);
+                let modelList = i.modelList; // 假设 i.modelList 已经加载
+                if (!modelList) {
+                    console.error('模型列表未加载');
+                    return;
+                }
+                let modelId = localStorage.getItem('modelId');
+                let modelTexturesId = localStorage.getItem('modelTexturesId');
+
+                // 检测 modelId 范围
+                if (modelId === null || isNaN(modelId) || modelId < 0 || modelId >= modelList.models.length) {
+                    modelId = Math.floor(Math.random() * modelList.models.length);
+                }
+
+                // 检测 modelTexturesId 范围
+                let textureCount = modelList.models[modelId].textures.length;
+                if (modelTexturesId === null || isNaN(modelTexturesId) || modelTexturesId < 0 || modelTexturesId >= textureCount) {
+                    modelTexturesId = Math.floor(Math.random() * textureCount);
+                }
+
+                // 保存新的 modelId 和 modelTexturesId 到 localStorage
+                localStorage.setItem('modelId', modelId);
+                localStorage.setItem('modelTexturesId', modelTexturesId);
+
+                // 加载模型
+                i.loadModel(modelId, modelTexturesId);
+
+                // 继续处理 waifuPath
+                fetch(t.waifuPath)
+                   .then(e => e.json())
+                   .then(c);
             })();
     }
     window.initWidget = function (e, t) {
@@ -229,7 +252,7 @@
         o.addEventListener('click', () => {
             o.classList.remove('waifu-toggle-active'),
                 o.getAttribute('first-time')
-                    ? (i(e), o.removeAttribute('first-time'))
+                   ? (i(e), o.removeAttribute('first-time'))
                     : (localStorage.removeItem('waifu-display'),
                       (document.getElementById('waifu').style.display = ''),
                       setTimeout(() => {
@@ -237,10 +260,10 @@
                       }, 0));
         }),
             localStorage.getItem('waifu-display') && Date.now() - localStorage.getItem('waifu-display') <= 864e5
-                ? (o.setAttribute('first-time', !0),
+               ? (o.setAttribute('first-time', !0),
                   setTimeout(() => {
                       o.classList.add('waifu-toggle-active');
                   }, 0))
                 : i(e);
     };
-})();
+})();    
