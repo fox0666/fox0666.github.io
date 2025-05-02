@@ -216,7 +216,7 @@
             (function () {
                 let e = localStorage.getItem('modelId'),
                     o = localStorage.getItem('modelTexturesId');
-                null === e && ((e = 1), (o = 53)),
+                null === e && ((e = 1), (o = 0)),
                     i.loadModel(e, o),
                     fetch(t.waifuPath)
                         .then(e => e.json())
