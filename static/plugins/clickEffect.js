@@ -13,7 +13,6 @@ function clickEffect() {
     const canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     canvas.setAttribute("style", "width: 100%; height: 100%; top: 0; left: 0; z-index: 99999; position: fixed; pointer-events: none;");
-
     if (canvas.getContext && window.addEventListener) {
         ctx = canvas.getContext("2d");
         updateSize();
@@ -29,8 +28,8 @@ function clickEffect() {
             }, 500);
         }, false);
         window.addEventListener("mouseup", function (e) {
-            clearInterval(longPress);
-            if (longPressed == true) {
+            clearTimeout(longPress);
+            if (longPressed) {
                 document.body.classList.remove("is-longpress");
                 pushShapes(randBetween(50 + Math.ceil(multiplier), 100 + Math.ceil(multiplier)), e.clientX, e.clientY);
                 longPressed = false;
@@ -40,15 +39,14 @@ function clickEffect() {
     } else {
         console.log("canvas or addEventListener is unsupported!");
     }
-
     function updateSize() {
-        canvas.width = window.innerWidth * 2;
-        canvas.height = window.innerHeight * 2;
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * 2;
+        canvas.height = height * 2;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
         ctx.scale(2, 2);
-        width = (canvas.width = window.innerWidth);
-        height = (canvas.height = window.innerHeight);
         origin = {
             x: width / 2,
             y: height / 2
@@ -58,13 +56,12 @@ function clickEffect() {
             y: height / 2
         };
     }
-
     class Shape {
         constructor(x = origin.x, y = origin.y) {
             this.x = x;
             this.y = y;
             this.angle = Math.PI * 2 * Math.random();
-            if (longPressed == true) {
+            if (longPressed) {
                 this.multiplier = randBetween(14 + multiplier, 15 + multiplier);
             } else {
                 this.multiplier = randBetween(6, 12);
@@ -73,22 +70,20 @@ function clickEffect() {
             this.vy = (this.multiplier + Math.random() * 0.5) * Math.sin(this.angle);
             this.size = randBetween(8, 12) + 3 * Math.random();
             this.color = shapeColours[Math.floor(Math.random() * shapeColours.length)];
-            this.type = Math.floor(Math.random() * 5); // 0: 圆形, 1: 三角形, 2: 正方形, 3: 五边形, 4: 六边形
+            this.type = Math.floor(Math.random() * 5);
             this.rotation = Math.random() * Math.PI * 2;
             this.rotationSpeed = (Math.random() - 0.5) * 0.1;
         }
-
         update() {
             this.x += this.vx - normal.x;
             this.y += this.vy - normal.y;
-            normal.x = -2 / window.innerWidth * Math.sin(this.angle);
-            normal.y = -2 / window.innerHeight * Math.cos(this.angle);
+            normal.x = -2 / width * Math.sin(this.angle);
+            normal.y = -2 / height * Math.cos(this.angle);
             this.size -= 0.1;
             this.vx *= 0.98;
             this.vy *= 0.98;
             this.rotation += this.rotationSpeed;
         }
-
         draw() {
             let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
             gradient.addColorStop(0, this.color);
@@ -149,7 +144,6 @@ function clickEffect() {
             ctx.fill();
         }
     }
-
     class Wave {
         constructor(x, y) {
             this.x = x;
@@ -159,68 +153,57 @@ function clickEffect() {
             this.speed = randBetween(2, 4);
             this.color = waveColours[Math.floor(Math.random() * waveColours.length)];
         }
-
         update() {
             this.r += this.speed;
             this.opacity -= 0.015;
         }
     }
-
     function pushShapes(count = 1, x = origin.x, y = origin.y) {
         for (let i = 0; i < count; i++) {
             shapes.push(new Shape(x, y));
         }
     }
-
     function createWave(x, y) {
         waves.push(new Wave(x, y));
     }
-
     function randBetween(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-
     function loop() {
         ctx.fillStyle = "rgba(255, 255, 255, 0)";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // 绘制水波
+        let newWaves = [];
         for (let i = 0; i < waves.length; i++) {
             let w = waves[i];
-            if (w.opacity <= 0) {
-                waves.splice(i, 1);
-                i--;
-                continue;
+            if (w.opacity > 0) {
+                let gradient = ctx.createRadialGradient(w.x, w.y, 0, w.x, w.y, w.r);
+                gradient.addColorStop(0, w.color.replace("0.5", "0.8"));
+                gradient.addColorStop(1, w.color.replace("0.5", "0"));
+                ctx.beginPath();
+                ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                w.update();
+                newWaves.push(w);
             }
-            let gradient = ctx.createRadialGradient(w.x, w.y, 0, w.x, w.y, w.r);
-            gradient.addColorStop(0, w.color.replace("0.5", "0.8"));
-            gradient.addColorStop(1, w.color.replace("0.5", "0"));
-            ctx.beginPath();
-            ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            w.update();
         }
-
-        // 绘制形状
+        waves = newWaves;
+        let newShapes = [];
         for (let i = 0; i < shapes.length; i++) {
             let s = shapes[i];
-            if (s.size < 0) {
-                shapes.splice(i, 1);
-                i--;
-                continue;
+            if (s.size >= 0) {
+                s.draw();
+                s.update();
+                newShapes.push(s);
             }
-            s.draw();
-            s.update();
         }
-
-        if (longPressed == true) {
+        shapes = newShapes;
+        if (longPressed) {
             multiplier += 0.2;
         } else if (!longPressed && multiplier >= 0) {
             multiplier -= 0.4;
         }
         requestAnimationFrame(loop);
     }
-}
-    
+}    
