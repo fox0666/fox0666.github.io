@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>《苔痕小筑》</title><link>https://blog.369988.xyz</link><description>收集生活中散落的灵感碎片，将日常的细微感动、思考的闪光照亮成文字</description><copyright>《苔痕小筑》</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427195840.jpg</url><title>avatar</title><link>https://blog.369988.xyz</link></image><lastBuildDate>Sat, 03 May 2025 05:03:41 +0000</lastBuildDate><managingEditor>《苔痕小筑》</managingEditor><ttl>60</ttl><webMaster>《苔痕小筑》</webMaster><item><title>【备考日记】Day 1：启程，从「有序」开始</title><link>https://blog.369988.xyz/post/%E3%80%90-bei-kao-ri-ji-%E3%80%91Day%201%EF%BC%9A-qi-cheng-%EF%BC%8C-cong-%E3%80%8C-you-xu-%E3%80%8D-kai-shi.html</link><description>### 【备考必做清单：从决心到行动的10条铁律】  
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>《苔痕小筑》</title><link>https://blog.369988.xyz</link><description>收集生活中散落的灵感碎片，将日常的细微感动、思考的闪光照亮成文字</description><copyright>《苔痕小筑》</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250427/20250427195840.jpg</url><title>avatar</title><link>https://blog.369988.xyz</link></image><lastBuildDate>Sat, 03 May 2025 05:06:56 +0000</lastBuildDate><managingEditor>《苔痕小筑》</managingEditor><ttl>60</ttl><webMaster>《苔痕小筑》</webMaster><item><title>【备考日记】Day 1：启程，从「有序」开始</title><link>https://blog.369988.xyz/post/%E3%80%90-bei-kao-ri-ji-%E3%80%91Day%201%EF%BC%9A-qi-cheng-%EF%BC%8C-cong-%E3%80%8C-you-xu-%E3%80%8D-kai-shi.html</link><description>### 【备考必做清单：从决心到行动的10条铁律】  
 1. **制定可量化的每日计划**  
    - 按「模块+题量」拆分任务（如：行测资料分析20题/天+申论对策题1道）  
    - 用Excel/手账本记录进度，完成一项划掉一项，拒绝模糊的「今天学申论」式目标  
@@ -49,9 +49,9 @@
 亲爱的读者：​
 &amp;emsp;&amp;emsp;这里是我的私人角落，一个用文字和影像收藏时光碎片的地方。</description><guid isPermaLink="true">https://blog.369988.xyz/post/tai-hen-xiao-zhu-%EF%BC%9A-ji-lu-zhuan-feng-li-de-guang-yin.html</guid><pubDate>Thu, 01 May 2025 00:00:00 +0000</pubDate></item><item><title>灵魂小抄</title><link>https://blog.369988.xyz/about.html</link><description>### 使用特殊技巧
 **空格**
-&amp;emsp;&amp;emsp;要想打出两个空格，使用以下符号：
+ 　　要想打出两个空格，使用以下符号：
 ```
-&amp;emsp;&amp;emsp;
+&amp;emsp;&amp;emsp;或全角空格「 　　」
 ```
 ### 使用强调信息
-&amp;emsp;&amp;emsp;在 GitHub Flavored Markdown（GFM）或支持自定义标签的平台中，可通过特定语法添加可视化警示块，提升内容可读性。</description><guid isPermaLink="true">https://blog.369988.xyz/about.html</guid><pubDate>Tue, 29 Apr 2025 12:19:53 +0000</pubDate></item></channel></rss>
+ 　　在 GitHub Flavored Markdown（GFM）或支持自定义标签的平台中，可通过特定语法添加可视化警示块，提升内容可读性。</description><guid isPermaLink="true">https://blog.369988.xyz/about.html</guid><pubDate>Tue, 29 Apr 2025 12:19:53 +0000</pubDate></item></channel></rss>
