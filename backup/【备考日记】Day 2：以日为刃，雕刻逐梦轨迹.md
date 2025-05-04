@@ -1,6 +1,6 @@
 **一星陨落，黯淡不了星光灿烂。一花凋零，荒芜不了整个秋。披荆斩棘，前方乃鲜花遍布的康庄大道。终凌绝顶，脚下乃积翠如云的空蒙山色。请坚持走下去，世界必将报以最奇特的景色。**  ——ORANGE
 　　合上笔记本前，写上：
-`Gmeek-html<span class="spoiler">"那些看似不起波澜的日复一日，会在某天让你看见坚持的意义。" margin: "auto"</span>`
+`Gmeek-html<span class="spoiler">"那些看似不起波澜的日复一日，会在某天让你看见坚持的意义。"</span>`
 山高路远，但每一步都算数——只要笔尖还在动，心脏还在跳，终点就会从模糊的光点，变成触手可及的地平线。  
 
 `Gmeek-html<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/f/fox6/20250503/20250503202926.jpg">`
