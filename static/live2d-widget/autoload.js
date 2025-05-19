@@ -26,7 +26,7 @@ Promise.all([
 ]).then(() => {
     initWidget({
         waifuPath: live2d_path + "waifu-tips.json",
-        apiPath: "https://liv2d.xicao.dpdns.org/live2d_api/",
+        apiPath: "https://myn.dpdns.org/live2d-widget/live2d_api/",
         tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"]
     });
 });
