@@ -2,7 +2,7 @@
  * 访客信息显示模块 
  */ 
 
-window.VisitorInfoAutoHideDelay = 2600;
+window.VisitorInfoAutoHideDelay = 3600;
 
 function countryCodeToFlagEmoji(code){
   if(!code||code.length!==2) return "";
@@ -106,3 +106,4 @@ function initVisitorInfo(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initVisitorInfo);
 else initVisitorInfo();
+
