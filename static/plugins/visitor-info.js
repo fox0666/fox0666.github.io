@@ -1,8 +1,9 @@
 /** 
- * 访客信息显示模块 
+ * 访客信息显示模块（桌面右上角自动隐藏 + 鼠标悬停显示） 
  */ 
 
 window.VisitorInfoAutoHideDelay = 3600;
+window.VisitorInfoHoverArea = 60; // 鼠标悬停触发区域大小（px）
 
 function countryCodeToFlagEmoji(code){
   if(!code||code.length!==2) return "";
@@ -38,7 +39,8 @@ function initVisitorInfo(){
   }).catch(()=>displayVisitorInfo({}));
 
   function displayVisitorInfo(data){
-    const container=document.createElement("div"); document.body.appendChild(container);
+    const container=document.createElement("div"); 
+    document.body.appendChild(container);
 
     // 容器样式
     Object.assign(container.style,{
@@ -86,9 +88,19 @@ function initVisitorInfo(){
     document.documentElement.addEventListener("themechange",updateTheme);
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",updateTheme);
 
-    // 桌面端自动隐藏
     if(window.innerWidth>768){
-      setTimeout(()=>{container.style.opacity="0";}, window.VisitorInfoAutoHideDelay||2600);
+      // 桌面端自动隐藏
+      let hidden=false;
+      setTimeout(()=>{container.style.opacity="0"; hidden=true;}, window.VisitorInfoAutoHideDelay||2600);
+
+      // 鼠标悬停显示
+      document.addEventListener("mousemove",(e)=>{
+        if(hidden && e.clientX>window.innerWidth-window.VisitorInfoHoverArea && e.clientY<window.VisitorInfoHoverArea){
+          container.style.opacity="1";
+          hidden=false;
+          setTimeout(()=>{container.style.opacity="0"; hidden=true;}, window.VisitorInfoAutoHideDelay||2600);
+        }
+      });
     } else {
       // 移动端底部弹出
       Object.assign(container.style,{position:"fixed",left:"0",bottom:"0",width:"100%"});
@@ -106,4 +118,3 @@ function initVisitorInfo(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initVisitorInfo);
 else initVisitorInfo();
-
