@@ -9,7 +9,7 @@
         spinSpeed: 0.25    // 旋转速度
     };
 
-    const sound = new Audio('/click.mp3');
+    const sound = new Audio('https://blog.369988.xyz/plugins/click.mp3');
     sound.crossOrigin = "anonymous";
 
     let canvas, ctx, width, height;
