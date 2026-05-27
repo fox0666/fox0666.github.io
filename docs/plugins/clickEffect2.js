@@ -4,21 +4,28 @@
     var script = document.currentScript;
 
     var config = {
-        sound: getAttr('data-sound', './mixkit-arcade.wav'),
+        sound: getAttr('data-sound', 'https://blog.369988.xyz/plugins/mixkit-arcade.wav'),
         volume: Number(getAttr('data-volume', '0.5')),
-        bubbleCount: Number(getAttr('data-count', '10')),
-        holdInterval: Number(getAttr('data-hold-interval', '90')),
+        bubbleCount: Number(getAttr('data-count', '12')),
+        holdInterval: Number(getAttr('data-hold-interval', '85')),
         zIndex: Number(getAttr('data-z-index', '999999')),
+        maxHoldSize: Number(getAttr('data-max-hold-size', '128')),
+        holdGrowSpeed: Number(getAttr('data-hold-grow-speed', '2.2')),
         ignoreInput: getAttr('data-ignore-input', 'true') !== 'false'
     };
 
-    var styleId = 'bubble-click-effect-style-v2';
+    var styleId = 'rainbow-bubble-click-style';
+
     var isDown = false;
-    var holdTimer = null;
-    var holdBubble = null;
-    var holdStartTime = 0;
     var pointerX = 0;
     var pointerY = 0;
+
+    var holdTimer = null;
+    var holdBubble = null;
+    var holdSize = 0;
+    var holdStartTime = 0;
+    var hasAutoBurst = false;
+
     var audioPool = [];
     var audioIndex = 0;
 
@@ -42,7 +49,7 @@
             return;
         }
 
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 8; i++) {
             var audio = new Audio(config.sound);
             audio.preload = 'auto';
             audio.volume = clamp(config.volume, 0, 1);
@@ -63,13 +70,8 @@
             movePointer(event.clientX, event.clientY);
         }, { passive: true });
 
-        document.addEventListener('mouseup', function () {
-            endPress();
-        }, { passive: true });
-
-        document.addEventListener('mouseleave', function () {
-            endPress();
-        }, { passive: true });
+        document.addEventListener('mouseup', endPress, { passive: true });
+        document.addEventListener('mouseleave', endPress, { passive: true });
 
         document.addEventListener('touchstart', function (event) {
             if (!event.touches || !event.touches.length) {
@@ -93,13 +95,8 @@
             movePointer(touch.clientX, touch.clientY);
         }, { passive: true });
 
-        document.addEventListener('touchend', function () {
-            endPress();
-        }, { passive: true });
-
-        document.addEventListener('touchcancel', function () {
-            endPress();
-        }, { passive: true });
+        document.addEventListener('touchend', endPress, { passive: true });
+        document.addEventListener('touchcancel', endPress, { passive: true });
 
         document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
@@ -125,22 +122,28 @@
         pointerY = y;
         isDown = true;
         holdStartTime = Date.now();
+        holdSize = 46;
+        hasAutoBurst = false;
 
         playSound();
         createClickEffect(x, y);
-        createHoldCore(x, y);
+        createHoldBubble(x, y);
 
         clearInterval(holdTimer);
         holdTimer = setInterval(function () {
-            if (!isDown) {
+            if (!isDown || !holdBubble) {
                 return;
             }
 
-            createFloatingBubbles(pointerX, pointerY, 3);
-            createTinySpark(pointerX, pointerY);
+            holdSize += config.holdGrowSpeed;
 
-            if (holdBubble) {
-                updateHoldCore(pointerX, pointerY);
+            updateHoldBubble(pointerX, pointerY, holdSize);
+            createFloatingBubbles(pointerX, pointerY, 3);
+            createTinyColorSpark(pointerX, pointerY);
+
+            if (holdSize >= config.maxHoldSize && !hasAutoBurst) {
+                hasAutoBurst = true;
+                autoBurstHoldBubble();
             }
         }, config.holdInterval);
     }
@@ -150,7 +153,7 @@
         pointerY = y;
 
         if (isDown && holdBubble) {
-            updateHoldCore(x, y);
+            updateHoldBubble(x, y, holdSize);
         }
     }
 
@@ -163,13 +166,34 @@
         clearInterval(holdTimer);
         holdTimer = null;
 
-        var holdDuration = Date.now() - holdStartTime;
-
         if (holdBubble) {
-            burstHoldCore(pointerX, pointerY, holdDuration);
+            var duration = Date.now() - holdStartTime;
+
+            burstHoldBubble(pointerX, pointerY, duration, holdSize);
+
             holdBubble.remove();
             holdBubble = null;
         }
+    }
+
+    function autoBurstHoldBubble() {
+        if (!holdBubble) {
+            return;
+        }
+
+        var x = pointerX;
+        var y = pointerY;
+        var size = holdSize;
+
+        playSound();
+        burstHoldBubble(x, y, 1800, size);
+
+        holdBubble.remove();
+        holdBubble = null;
+
+        clearInterval(holdTimer);
+        holdTimer = null;
+        isDown = false;
     }
 
     function playSound() {
@@ -195,22 +219,79 @@
 
     function createClickEffect(x, y) {
         createRipple(x, y, 'normal');
-        createRipple(x, y, 'soft');
+        createRipple(x, y, 'rainbow');
 
         for (var i = 0; i < config.bubbleCount; i++) {
             createBubble(x, y, false);
         }
 
-        for (var j = 0; j < 6; j++) {
+        for (var j = 0; j < 8; j++) {
             createStar(x, y);
+        }
+    }
+
+    function createHoldBubble(x, y) {
+        if (holdBubble) {
+            holdBubble.remove();
+            holdBubble = null;
+        }
+
+        holdBubble = document.createElement('span');
+        holdBubble.className = 'rainbow-bubble-hold';
+        holdBubble.style.left = x + 'px';
+        holdBubble.style.top = y + 'px';
+        holdBubble.style.width = holdSize + 'px';
+        holdBubble.style.height = holdSize + 'px';
+        holdBubble.style.zIndex = config.zIndex;
+
+        document.body.appendChild(holdBubble);
+    }
+
+    function updateHoldBubble(x, y, size) {
+        if (!holdBubble) {
+            return;
+        }
+
+        holdBubble.style.left = x + 'px';
+        holdBubble.style.top = y + 'px';
+        holdBubble.style.width = size + 'px';
+        holdBubble.style.height = size + 'px';
+
+        var progress = Math.min(size / config.maxHoldSize, 1);
+        holdBubble.style.setProperty('--hold-progress', progress);
+    }
+
+    function burstHoldBubble(x, y, duration, size) {
+        var power = Math.min(Math.floor(duration / 180), 12);
+        var count = 16 + power * 3;
+
+        createBigPop(x, y, size);
+        createRipple(x, y, 'rainbow');
+        createRipple(x, y, 'big');
+
+        for (var i = 0; i < count; i++) {
+            createBubble(x, y, false, true);
+        }
+
+        for (var j = 0; j < 12 + power; j++) {
+            createStar(x, y);
+        }
+
+        for (var k = 0; k < 8; k++) {
+            createFloatingBubbles(x + random(-20, 20), y + random(-20, 20), 1);
         }
     }
 
     function createRipple(x, y, type) {
         var ripple = document.createElement('span');
-        ripple.className = type === 'soft'
-            ? 'bubble-click-ripple bubble-click-ripple-soft'
-            : 'bubble-click-ripple';
+
+        if (type === 'rainbow') {
+            ripple.className = 'rainbow-bubble-ripple rainbow-bubble-ripple-color';
+        } else if (type === 'big') {
+            ripple.className = 'rainbow-bubble-ripple rainbow-bubble-ripple-big';
+        } else {
+            ripple.className = 'rainbow-bubble-ripple';
+        }
 
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
@@ -218,139 +299,117 @@
 
         document.body.appendChild(ripple);
 
-        removeLater(ripple, type === 'soft' ? 900 : 680);
+        removeLater(ripple, type === 'big' ? 1100 : 800);
     }
 
-    function createBubble(x, y, isFloating) {
+    function createBubble(x, y, isFloating, isBurst) {
         var bubble = document.createElement('span');
-        bubble.className = isFloating ? 'bubble-click-item bubble-click-float' : 'bubble-click-item';
+        bubble.className = isFloating
+            ? 'rainbow-bubble-item rainbow-bubble-float'
+            : 'rainbow-bubble-item';
 
-        var size = isFloating ? random(12, 32) : random(10, 30);
+        if (isBurst) {
+            bubble.className += ' rainbow-bubble-burst';
+        }
+
+        var size = isFloating ? random(10, 30) : random(10, 34);
         var angle = Math.random() * Math.PI * 2;
-        var distance = isFloating ? random(20, 56) : random(30, 90);
+        var distance = isBurst ? random(70, 150) : random(32, 95);
 
         var moveX = Math.cos(angle) * distance;
         var moveY;
 
         if (isFloating) {
-            moveY = -random(70, 150);
+            moveY = -random(80, 170);
+            moveX += random(-28, 28);
         } else {
-            moveY = Math.sin(angle) * distance - random(20, 54);
+            moveY = Math.sin(angle) * distance - random(22, 58);
         }
 
-        var hue = random(180, 230);
+        var hue = random(0, 360);
+        var delay = random(0, 60);
 
-        bubble.style.left = x + random(-4, 4) + 'px';
-        bubble.style.top = y + random(-4, 4) + 'px';
+        bubble.style.left = x + random(-5, 5) + 'px';
+        bubble.style.top = y + random(-5, 5) + 'px';
         bubble.style.width = size + 'px';
         bubble.style.height = size + 'px';
         bubble.style.zIndex = config.zIndex;
+        bubble.style.animationDelay = delay + 'ms';
+
         bubble.style.setProperty('--move-x', moveX + 'px');
         bubble.style.setProperty('--move-y', moveY + 'px');
         bubble.style.setProperty('--hue', hue);
 
         document.body.appendChild(bubble);
 
-        removeLater(bubble, isFloating ? 1350 : 850);
+        removeLater(bubble, isFloating ? 1500 : 950);
     }
 
     function createFloatingBubbles(x, y, count) {
         for (var i = 0; i < count; i++) {
             createBubble(
-                x + random(-18, 18),
-                y + random(-12, 12),
-                true
+                x + random(-20, 20),
+                y + random(-10, 16),
+                true,
+                false
             );
         }
     }
 
     function createStar(x, y) {
         var star = document.createElement('span');
-        star.className = 'bubble-click-star';
+        star.className = 'rainbow-bubble-star';
 
         var angle = Math.random() * Math.PI * 2;
-        var distance = random(26, 76);
+        var distance = random(34, 105);
 
         var moveX = Math.cos(angle) * distance;
-        var moveY = Math.sin(angle) * distance - random(12, 42);
+        var moveY = Math.sin(angle) * distance - random(18, 55);
+        var hue = random(0, 360);
 
         star.style.left = x + 'px';
         star.style.top = y + 'px';
         star.style.zIndex = config.zIndex;
         star.style.setProperty('--move-x', moveX + 'px');
         star.style.setProperty('--move-y', moveY + 'px');
+        star.style.setProperty('--hue', hue);
 
         document.body.appendChild(star);
 
-        removeLater(star, 680);
+        removeLater(star, 760);
     }
 
-    function createTinySpark(x, y) {
+    function createTinyColorSpark(x, y) {
         var spark = document.createElement('span');
-        spark.className = 'bubble-click-tiny-spark';
+        spark.className = 'rainbow-bubble-tiny-spark';
 
-        spark.style.left = x + random(-16, 16) + 'px';
-        spark.style.top = y + random(-16, 16) + 'px';
+        var hue = random(0, 360);
+
+        spark.style.left = x + random(-24, 24) + 'px';
+        spark.style.top = y + random(-24, 24) + 'px';
         spark.style.zIndex = config.zIndex;
+        spark.style.setProperty('--hue', hue);
 
         document.body.appendChild(spark);
 
-        removeLater(spark, 700);
+        removeLater(spark, 760);
     }
 
-    function createHoldCore(x, y) {
-        if (holdBubble) {
-            holdBubble.remove();
-            holdBubble = null;
-        }
-
-        holdBubble = document.createElement('span');
-        holdBubble.className = 'bubble-click-hold-core';
-        holdBubble.style.left = x + 'px';
-        holdBubble.style.top = y + 'px';
-        holdBubble.style.zIndex = config.zIndex;
-
-        document.body.appendChild(holdBubble);
-    }
-
-    function updateHoldCore(x, y) {
-        if (!holdBubble) {
-            return;
-        }
-
-        holdBubble.style.left = x + 'px';
-        holdBubble.style.top = y + 'px';
-    }
-
-    function burstHoldCore(x, y, duration) {
-        var power = Math.min(Math.floor(duration / 220), 8);
-        var count = 10 + power * 3;
-
-        createRipple(x, y, 'normal');
-        createRipple(x, y, 'soft');
-
-        for (var i = 0; i < count; i++) {
-            createBubble(x, y, false);
-        }
-
-        for (var j = 0; j < 8 + power; j++) {
-            createStar(x, y);
-        }
-
-        createBigPop(x, y);
-    }
-
-    function createBigPop(x, y) {
+    function createBigPop(x, y, size) {
         var pop = document.createElement('span');
-        pop.className = 'bubble-click-big-pop';
+        pop.className = 'rainbow-bubble-big-pop';
+
+        var popSize = Math.max(size || 86, 86);
 
         pop.style.left = x + 'px';
         pop.style.top = y + 'px';
+        pop.style.width = popSize + 'px';
+        pop.style.height = popSize + 'px';
         pop.style.zIndex = config.zIndex;
 
         document.body.appendChild(pop);
 
-        removeLater(pop, 760);
+        removeLater(pop, 900);
     }
 
     function removeLater(el, time) {
@@ -370,12 +429,12 @@
         style.id = styleId;
 
         style.innerHTML = `
-            .bubble-click-ripple,
-            .bubble-click-item,
-            .bubble-click-star,
-            .bubble-click-hold-core,
-            .bubble-click-tiny-spark,
-            .bubble-click-big-pop {
+            .rainbow-bubble-ripple,
+            .rainbow-bubble-item,
+            .rainbow-bubble-star,
+            .rainbow-bubble-hold,
+            .rainbow-bubble-tiny-spark,
+            .rainbow-bubble-big-pop {
                 position: fixed;
                 left: 0;
                 top: 0;
@@ -383,178 +442,265 @@
                 box-sizing: border-box;
             }
 
-            .bubble-click-ripple {
-                width: 24px;
-                height: 24px;
+            .rainbow-bubble-ripple {
+                width: 26px;
+                height: 26px;
                 border-radius: 50%;
-                border: 2px solid rgba(90, 220, 255, 0.72);
+                border: 2px solid rgba(110, 225, 255, 0.72);
                 box-shadow:
-                    0 0 18px rgba(90, 220, 255, 0.58),
-                    inset 0 0 14px rgba(255, 255, 255, 0.72);
-                transform: translate(-50%, -50%) scale(0.2);
-                animation: bubbleClickRipple 680ms ease-out forwards;
+                    0 0 18px rgba(110, 225, 255, 0.58),
+                    inset 0 0 14px rgba(255, 255, 255, 0.76);
+                transform: translate(-50%, -50%) scale(0.18);
+                animation: rainbowBubbleRipple 760ms ease-out forwards;
             }
 
-            .bubble-click-ripple-soft {
+            .rainbow-bubble-ripple-color {
                 width: 34px;
                 height: 34px;
-                border-color: rgba(180, 150, 255, 0.35);
+                border: 2px solid rgba(255, 255, 255, 0.7);
+                background:
+                    conic-gradient(
+                        from 0deg,
+                        rgba(255, 80, 150, 0.28),
+                        rgba(255, 210, 80, 0.25),
+                        rgba(100, 255, 170, 0.25),
+                        rgba(80, 220, 255, 0.28),
+                        rgba(160, 120, 255, 0.25),
+                        rgba(255, 80, 180, 0.28)
+                    );
                 box-shadow:
-                    0 0 28px rgba(156, 190, 255, 0.45),
-                    inset 0 0 18px rgba(255, 255, 255, 0.55);
+                    0 0 22px rgba(120, 230, 255, 0.5),
+                    0 0 36px rgba(200, 120, 255, 0.32);
                 animation-duration: 900ms;
             }
 
-            .bubble-click-item {
+            .rainbow-bubble-ripple-big {
+                width: 48px;
+                height: 48px;
+                border: 2px solid rgba(255, 255, 255, 0.82);
+                background:
+                    conic-gradient(
+                        rgba(255, 90, 150, 0.22),
+                        rgba(255, 230, 90, 0.22),
+                        rgba(80, 255, 180, 0.22),
+                        rgba(80, 210, 255, 0.22),
+                        rgba(165, 120, 255, 0.22),
+                        rgba(255, 90, 180, 0.22)
+                    );
+                animation: rainbowBubbleBigRipple 1100ms ease-out forwards;
+            }
+
+            .rainbow-bubble-item {
                 border-radius: 50%;
                 transform: translate(-50%, -50%) scale(0.18);
                 background:
-                    radial-gradient(circle at 28% 24%,
+                    radial-gradient(circle at 28% 23%,
                         rgba(255, 255, 255, 1) 0%,
-                        rgba(255, 255, 255, 0.92) 10%,
-                        hsla(var(--hue), 100%, 76%, 0.62) 34%,
-                        hsla(calc(var(--hue) + 32), 95%, 68%, 0.28) 68%,
-                        rgba(255, 255, 255, 0.03) 100%
-                    );
-                border: 1px solid rgba(255, 255, 255, 0.78);
-                box-shadow:
-                    0 0 13px hsla(var(--hue), 100%, 70%, 0.62),
-                    inset 0 0 10px rgba(255, 255, 255, 0.8),
-                    inset -4px -6px 12px rgba(70, 170, 255, 0.18);
-                animation: bubbleClickFly 820ms cubic-bezier(.16,.88,.32,1) forwards;
-            }
-
-            .bubble-click-item::before {
-                content: "";
-                position: absolute;
-                left: 24%;
-                top: 19%;
-                width: 28%;
-                height: 18%;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.95);
-                transform: rotate(-28deg);
-                filter: blur(0.2px);
-            }
-
-            .bubble-click-item::after {
-                content: "";
-                position: absolute;
-                right: 23%;
-                bottom: 24%;
-                width: 14%;
-                height: 14%;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.55);
-            }
-
-            .bubble-click-float {
-                animation: bubbleClickFloat 1350ms ease-out forwards;
-            }
-
-            .bubble-click-star {
-                width: 7px;
-                height: 7px;
-                transform: translate(-50%, -50%) rotate(45deg) scale(0.3);
-                background: rgba(255, 255, 255, 0.96);
-                box-shadow:
-                    0 0 8px rgba(255, 255, 255, 0.98),
-                    0 0 18px rgba(95, 222, 255, 0.88);
-                animation: bubbleClickStar 640ms ease-out forwards;
-            }
-
-            .bubble-click-tiny-spark {
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                background: rgba(255, 255, 255, 0.95);
-                box-shadow:
-                    0 0 8px rgba(255, 255, 255, 0.95),
-                    0 0 15px rgba(110, 225, 255, 0.85);
-                transform: translate(-50%, -50%) scale(0.5);
-                animation: bubbleClickTinySpark 700ms ease-out forwards;
-            }
-
-            .bubble-click-hold-core {
-                width: 54px;
-                height: 54px;
-                border-radius: 50%;
-                transform: translate(-50%, -50%) scale(0.4);
-                background:
-                    radial-gradient(circle at 30% 24%,
-                        rgba(255, 255, 255, 1) 0%,
-                        rgba(255, 255, 255, 0.92) 12%,
-                        rgba(115, 228, 255, 0.55) 36%,
-                        rgba(155, 130, 255, 0.28) 72%,
+                        rgba(255, 255, 255, 0.96) 10%,
+                        hsla(var(--hue), 100%, 78%, 0.68) 30%,
+                        hsla(calc(var(--hue) + 70), 100%, 70%, 0.42) 55%,
+                        hsla(calc(var(--hue) + 145), 100%, 68%, 0.2) 78%,
                         rgba(255, 255, 255, 0.04) 100%
                     );
-                border: 1px solid rgba(255, 255, 255, 0.78);
+                border: 1px solid rgba(255, 255, 255, 0.82);
                 box-shadow:
-                    0 0 18px rgba(95, 220, 255, 0.58),
-                    0 0 38px rgba(150, 140, 255, 0.3),
-                    inset 0 0 18px rgba(255, 255, 255, 0.82),
-                    inset -8px -10px 24px rgba(90, 160, 255, 0.18);
+                    0 0 13px hsla(var(--hue), 100%, 70%, 0.68),
+                    0 0 24px hsla(calc(var(--hue) + 90), 100%, 70%, 0.28),
+                    inset 0 0 11px rgba(255, 255, 255, 0.86),
+                    inset -5px -7px 13px hsla(calc(var(--hue) + 180), 100%, 60%, 0.18);
                 animation:
-                    bubbleHoldAppear 260ms ease-out forwards,
-                    bubbleHoldPulse 1200ms ease-in-out infinite 260ms;
+                    rainbowBubbleFly 880ms cubic-bezier(.16,.88,.32,1) forwards,
+                    rainbowBubbleHue 1300ms linear infinite;
             }
 
-            .bubble-click-hold-core::before {
+            .rainbow-bubble-item::before {
                 content: "";
                 position: absolute;
-                left: 22%;
+                left: 23%;
                 top: 18%;
                 width: 30%;
                 height: 18%;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.96);
+                background: rgba(255, 255, 255, 0.98);
+                transform: rotate(-28deg);
+                filter: blur(0.15px);
+            }
+
+            .rainbow-bubble-item::after {
+                content: "";
+                position: absolute;
+                right: 22%;
+                bottom: 23%;
+                width: 15%;
+                height: 15%;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.56);
+            }
+
+            .rainbow-bubble-float {
+                animation:
+                    rainbowBubbleFloat 1500ms ease-out forwards,
+                    rainbowBubbleHue 1300ms linear infinite;
+            }
+
+            .rainbow-bubble-burst {
+                animation:
+                    rainbowBubbleBurst 920ms cubic-bezier(.15,.9,.2,1) forwards,
+                    rainbowBubbleHue 1000ms linear infinite;
+            }
+
+            .rainbow-bubble-star {
+                width: 8px;
+                height: 8px;
+                transform: translate(-50%, -50%) rotate(45deg) scale(0.25);
+                background: hsla(var(--hue), 100%, 82%, 0.98);
+                box-shadow:
+                    0 0 8px rgba(255, 255, 255, 0.98),
+                    0 0 18px hsla(var(--hue), 100%, 68%, 0.9),
+                    0 0 30px hsla(calc(var(--hue) + 100), 100%, 70%, 0.45);
+                animation:
+                    rainbowBubbleStar 720ms ease-out forwards,
+                    rainbowBubbleHue 900ms linear infinite;
+            }
+
+            .rainbow-bubble-tiny-spark {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: hsla(var(--hue), 100%, 82%, 0.96);
+                box-shadow:
+                    0 0 8px rgba(255, 255, 255, 0.95),
+                    0 0 17px hsla(var(--hue), 100%, 70%, 0.85);
+                transform: translate(-50%, -50%) scale(0.5);
+                animation:
+                    rainbowBubbleTinySpark 760ms ease-out forwards,
+                    rainbowBubbleHue 900ms linear infinite;
+            }
+
+            .rainbow-bubble-hold {
+                --hold-progress: 0;
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(1);
+                background:
+                    radial-gradient(circle at 28% 22%,
+                        rgba(255, 255, 255, 1) 0%,
+                        rgba(255, 255, 255, 0.96) 9%,
+                        rgba(120, 230, 255, 0.62) 25%,
+                        rgba(255, 130, 210, 0.38) 45%,
+                        rgba(160, 120, 255, 0.32) 65%,
+                        rgba(80, 255, 190, 0.18) 82%,
+                        rgba(255, 255, 255, 0.04) 100%
+                    ),
+                    conic-gradient(
+                        from 0deg,
+                        rgba(255, 85, 150, 0.42),
+                        rgba(255, 220, 90, 0.38),
+                        rgba(80, 255, 170, 0.36),
+                        rgba(80, 215, 255, 0.42),
+                        rgba(165, 120, 255, 0.4),
+                        rgba(255, 85, 180, 0.42)
+                    );
+                border: 1px solid rgba(255, 255, 255, 0.88);
+                box-shadow:
+                    0 0 calc(18px + 22px * var(--hold-progress)) rgba(110, 225, 255, 0.62),
+                    0 0 calc(36px + 38px * var(--hold-progress)) rgba(210, 120, 255, 0.38),
+                    inset 0 0 20px rgba(255, 255, 255, 0.85),
+                    inset -10px -12px 28px rgba(90, 160, 255, 0.2);
+                animation:
+                    rainbowHoldAppear 220ms ease-out forwards,
+                    rainbowHoldPulse 1050ms ease-in-out infinite,
+                    rainbowBubbleHue 1700ms linear infinite;
+            }
+
+            .rainbow-bubble-hold::before {
+                content: "";
+                position: absolute;
+                left: 21%;
+                top: 17%;
+                width: 31%;
+                height: 18%;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.98);
                 transform: rotate(-26deg);
             }
 
-            .bubble-click-hold-core::after {
+            .rainbow-bubble-hold::after {
                 content: "";
                 position: absolute;
                 left: 50%;
                 top: 50%;
-                width: 72px;
-                height: 72px;
+                width: 135%;
+                height: 135%;
                 border-radius: 50%;
-                border: 1px solid rgba(115, 220, 255, 0.34);
-                transform: translate(-50%, -50%);
-                animation: bubbleHoldRing 1100ms ease-out infinite;
+                border: 1px solid rgba(255, 255, 255, 0.55);
+                background:
+                    conic-gradient(
+                        rgba(255, 80, 150, 0.16),
+                        rgba(255, 230, 80, 0.12),
+                        rgba(80, 255, 180, 0.13),
+                        rgba(80, 210, 255, 0.16),
+                        rgba(160, 120, 255, 0.13),
+                        rgba(255, 80, 180, 0.16)
+                    );
+                transform: translate(-50%, -50%) scale(0.72);
+                animation: rainbowHoldRing 1000ms ease-out infinite;
             }
 
-            .bubble-click-big-pop {
-                width: 72px;
-                height: 72px;
+            .rainbow-bubble-big-pop {
                 border-radius: 50%;
-                border: 2px solid rgba(130, 228, 255, 0.76);
-                transform: translate(-50%, -50%) scale(0.35);
+                transform: translate(-50%, -50%) scale(0.42);
+                border: 2px solid rgba(255, 255, 255, 0.86);
+                background:
+                    radial-gradient(circle,
+                        rgba(255,255,255,0.18),
+                        rgba(255,255,255,0.03) 55%,
+                        transparent 70%
+                    ),
+                    conic-gradient(
+                        rgba(255, 80, 150, 0.32),
+                        rgba(255, 230, 80, 0.28),
+                        rgba(80, 255, 180, 0.28),
+                        rgba(80, 210, 255, 0.34),
+                        rgba(160, 120, 255, 0.3),
+                        rgba(255, 80, 180, 0.32)
+                    );
                 box-shadow:
-                    0 0 24px rgba(100, 220, 255, 0.65),
-                    0 0 44px rgba(170, 145, 255, 0.42),
-                    inset 0 0 20px rgba(255, 255, 255, 0.7);
-                animation: bubbleBigPop 760ms ease-out forwards;
+                    0 0 28px rgba(100, 220, 255, 0.72),
+                    0 0 55px rgba(200, 120, 255, 0.5),
+                    inset 0 0 24px rgba(255, 255, 255, 0.76);
+                animation:
+                    rainbowBigPop 900ms ease-out forwards,
+                    rainbowBubbleHue 900ms linear infinite;
             }
 
-            @keyframes bubbleClickRipple {
+            @keyframes rainbowBubbleRipple {
                 0% {
-                    opacity: 0.95;
-                    transform: translate(-50%, -50%) scale(0.22);
+                    opacity: 0.96;
+                    transform: translate(-50%, -50%) scale(0.2);
                 }
                 100% {
                     opacity: 0;
-                    transform: translate(-50%, -50%) scale(4.4);
+                    transform: translate(-50%, -50%) scale(4.6);
                 }
             }
 
-            @keyframes bubbleClickFly {
+            @keyframes rainbowBubbleBigRipple {
+                0% {
+                    opacity: 0.95;
+                    transform: translate(-50%, -50%) scale(0.18) rotate(0deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(5.8) rotate(90deg);
+                }
+            }
+
+            @keyframes rainbowBubbleFly {
                 0% {
                     opacity: 1;
-                    transform: translate(-50%, -50%) scale(0.18);
-                    filter: blur(0);
+                    transform: translate(-50%, -50%) scale(0.16);
                 }
-                45% {
+                42% {
                     opacity: 0.96;
                 }
                 100% {
@@ -565,98 +711,123 @@
                             calc(-50% + var(--move-y))
                         )
                         scale(1.18);
-                    filter: blur(0.2px);
                 }
             }
 
-            @keyframes bubbleClickFloat {
-                0% {
-                    opacity: 0;
-                    transform: translate(-50%, -50%) scale(0.3);
-                }
-                12% {
-                    opacity: 0.92;
-                }
-                100% {
-                    opacity: 0;
-                    transform:
-                        translate(
-                            calc(-50% + var(--move-x)),
-                            calc(-50% + var(--move-y))
-                        )
-                        scale(1.05);
-                }
-            }
-
-            @keyframes bubbleClickStar {
-                0% {
-                    opacity: 1;
-                    transform: translate(-50%, -50%) rotate(45deg) scale(0.28);
-                }
-                100% {
-                    opacity: 0;
-                    transform:
-                        translate(
-                            calc(-50% + var(--move-x)),
-                            calc(-50% + var(--move-y))
-                        )
-                        rotate(190deg)
-                        scale(1.1);
-                }
-            }
-
-            @keyframes bubbleClickTinySpark {
-                0% {
-                    opacity: 0.9;
-                    transform: translate(-50%, -50%) scale(0.4);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translate(-50%, -90%) scale(1.2);
-                }
-            }
-
-            @keyframes bubbleHoldAppear {
+            @keyframes rainbowBubbleFloat {
                 0% {
                     opacity: 0;
                     transform: translate(-50%, -50%) scale(0.25);
                 }
+                14% {
+                    opacity: 0.96;
+                }
+                100% {
+                    opacity: 0;
+                    transform:
+                        translate(
+                            calc(-50% + var(--move-x)),
+                            calc(-50% + var(--move-y))
+                        )
+                        scale(1.1);
+                }
+            }
+
+            @keyframes rainbowBubbleBurst {
+                0% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(0.18);
+                }
+                35% {
+                    opacity: 0.98;
+                }
+                100% {
+                    opacity: 0;
+                    transform:
+                        translate(
+                            calc(-50% + var(--move-x)),
+                            calc(-50% + var(--move-y))
+                        )
+                        scale(1.35);
+                }
+            }
+
+            @keyframes rainbowBubbleStar {
+                0% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) rotate(45deg) scale(0.25);
+                }
+                100% {
+                    opacity: 0;
+                    transform:
+                        translate(
+                            calc(-50% + var(--move-x)),
+                            calc(-50% + var(--move-y))
+                        )
+                        rotate(220deg)
+                        scale(1.18);
+                }
+            }
+
+            @keyframes rainbowBubbleTinySpark {
+                0% {
+                    opacity: 0.96;
+                    transform: translate(-50%, -50%) scale(0.4);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -110%) scale(1.25);
+                }
+            }
+
+            @keyframes rainbowHoldAppear {
+                0% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.35);
+                }
                 100% {
                     opacity: 1;
                     transform: translate(-50%, -50%) scale(1);
                 }
             }
 
-            @keyframes bubbleHoldPulse {
+            @keyframes rainbowHoldPulse {
                 0%, 100% {
-                    transform: translate(-50%, -50%) scale(1);
-                    filter: hue-rotate(0deg);
+                    filter: hue-rotate(0deg) saturate(1.1);
                 }
                 50% {
-                    transform: translate(-50%, -50%) scale(1.16);
-                    filter: hue-rotate(18deg);
+                    filter: hue-rotate(45deg) saturate(1.45);
                 }
             }
 
-            @keyframes bubbleHoldRing {
+            @keyframes rainbowHoldRing {
                 0% {
-                    opacity: 0.7;
-                    transform: translate(-50%, -50%) scale(0.55);
+                    opacity: 0.72;
+                    transform: translate(-50%, -50%) scale(0.62) rotate(0deg);
                 }
                 100% {
                     opacity: 0;
-                    transform: translate(-50%, -50%) scale(1.45);
+                    transform: translate(-50%, -50%) scale(1.42) rotate(90deg);
                 }
             }
 
-            @keyframes bubbleBigPop {
+            @keyframes rainbowBigPop {
                 0% {
-                    opacity: 0.95;
-                    transform: translate(-50%, -50%) scale(0.35);
+                    opacity: 0.98;
+                    transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
                 }
                 100% {
                     opacity: 0;
-                    transform: translate(-50%, -50%) scale(2.2);
+                    transform: translate(-50%, -50%) scale(2.25) rotate(120deg);
+                }
+            }
+
+            @keyframes rainbowBubbleHue {
+                0% {
+                    filter: hue-rotate(0deg) saturate(1.15);
+                }
+                100% {
+                    filter: hue-rotate(360deg) saturate(1.25);
                 }
             }
         `;
