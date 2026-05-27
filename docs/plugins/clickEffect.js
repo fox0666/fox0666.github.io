@@ -1,15 +1,14 @@
 (function() {
-    // 核心配置：手感与视觉的平衡点
     const config = {
-        friction: 0.88,    // 摩擦力：0.8~0.9之间，越小范围越小
-        gravity: 0.2,      // 重力：轻轻下落
-        decay: 0.03,       // 消失速度
-        clickCount: 25,    // 单击粒子数
-        holdFreq: 3,       // 长按发射频率
-        spinSpeed: 0.25    // 旋转速度
+        friction: 0.88,
+        gravity: 0.2,
+        decay: 0.03,
+        clickCount: 25,
+        holdFreq: 3,
+        spinSpeed: 0.25
     };
 
-    const sound = new Audio('https://blog.369988.xyz/plugins/click.mp3');
+    const sound = new Audio('https://blog.369988.xyz/plugins/mixkit-arcade.wav');
     sound.crossOrigin = "anonymous";
 
     let canvas, ctx, width, height;
@@ -17,7 +16,7 @@
     let isDown = false;
     let mouseX = 0, mouseY = 0;
     let frame = 0;
-    let hue = 0; // 动态色相
+    let hue = 0;
 
     function init() {
         canvas = document.createElement("canvas");
@@ -75,10 +74,8 @@
         
         for (let i = 0; i < count; i++) {
             const p = new Particle(x, y);
-            // 颜色：使用 HSL 模式保证鲜艳且护眼，hue 随时间流动
             p.color = `hsl(${hue + Math.random() * 40}, 85%, 60%)`;
             
-            // 物理：单击炸裂 vs 长按螺旋
             const angle = isBurst 
                 ? Math.random() * Math.PI * 2 
                 : baseAngle + (Math.random() - 0.5) * 0.5;
@@ -112,7 +109,7 @@
             this.vy += config.gravity;
             this.life -= config.decay;
             this.rotation += this.rotSpeed;
-            this.size *= 0.96; // 粒子逐渐变小，显得更精致
+            this.size *= 0.96;
         }
 
         draw(ctx) {
@@ -136,14 +133,13 @@
     function loop() {
         ctx.clearRect(0, 0, width, height);
         
-        // 关键：lighter 混合模式让重叠处发光，产生霓虹质感
         ctx.globalCompositeOperation = 'lighter';
 
         if (isDown) {
-            hue += 2; // 长按时颜色快速流转
+            hue += 2;
             createParticles(mouseX, mouseY, config.holdFreq, false);
         } else {
-            hue += 0.5; // 平时颜色缓慢流转
+            hue += 0.5;
         }
 
         for (let i = particles.length - 1; i >= 0; i--) {
