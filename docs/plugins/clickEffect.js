@@ -8,7 +8,7 @@
         spinSpeed: 0.25
     };
 
-    const sound = new Audio('https://blog.369988.xyz/plugins/mixkit-arcade.wav');
+    const sound = new Audio('https://blog.369988.xyz/plugins/click.mp3');
     sound.crossOrigin = "anonymous";
 
     let canvas, ctx, width, height;
