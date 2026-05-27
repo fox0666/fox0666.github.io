@@ -5,21 +5,28 @@
 
     var config = {
         sound: getAttr('data-sound', 'https://blog.369988.xyz/plugins/mixkit-arcade.wav'),
-        volume: Number(getAttr('data-volume', '0.5')),
-        bubbleCount: Number(getAttr('data-count', '12')),
+        volume: Number(getAttr('data-volume', '0.45')),
+
+        clickBubbleCount: Number(getAttr('data-count', '7')),
+        clickMaxDistance: Number(getAttr('data-click-range', '42')),
+
+        holdDelay: Number(getAttr('data-hold-delay', '180')),
         holdInterval: Number(getAttr('data-hold-interval', '85')),
+        maxHoldSize: Number(getAttr('data-max-hold-size', '130')),
+        holdGrowSpeed: Number(getAttr('data-hold-grow-speed', '2.4')),
+
         zIndex: Number(getAttr('data-z-index', '999999')),
-        maxHoldSize: Number(getAttr('data-max-hold-size', '128')),
-        holdGrowSpeed: Number(getAttr('data-hold-grow-speed', '2.2')),
         ignoreInput: getAttr('data-ignore-input', 'true') !== 'false'
     };
 
-    var styleId = 'rainbow-bubble-click-style';
+    var styleId = 'rainbow-bubble-click-style-small-click';
 
     var isDown = false;
+    var isHolding = false;
     var pointerX = 0;
     var pointerY = 0;
 
+    var holdDelayTimer = null;
     var holdTimer = null;
     var holdBubble = null;
     var holdSize = 0;
@@ -121,17 +128,37 @@
         pointerX = x;
         pointerY = y;
         isDown = true;
-        holdStartTime = Date.now();
-        holdSize = 46;
+        isHolding = false;
         hasAutoBurst = false;
+        holdStartTime = Date.now();
 
         playSound();
-        createClickEffect(x, y);
+
+        // 普通点击：只生成小范围轻量特效
+        createSmallClickEffect(x, y);
+
+        clearTimeout(holdDelayTimer);
+        clearInterval(holdTimer);
+
+        // 长按延迟触发，快速点击不会生成大泡泡
+        holdDelayTimer = setTimeout(function () {
+            if (!isDown) {
+                return;
+            }
+
+            startHoldEffect(pointerX, pointerY);
+        }, config.holdDelay);
+    }
+
+    function startHoldEffect(x, y) {
+        isHolding = true;
+        holdSize = 46;
+
         createHoldBubble(x, y);
 
         clearInterval(holdTimer);
         holdTimer = setInterval(function () {
-            if (!isDown || !holdBubble) {
+            if (!isDown || !isHolding || !holdBubble) {
                 return;
             }
 
@@ -152,7 +179,7 @@
         pointerX = x;
         pointerY = y;
 
-        if (isDown && holdBubble) {
+        if (isDown && isHolding && holdBubble) {
             updateHoldBubble(x, y, holdSize);
         }
     }
@@ -163,17 +190,22 @@
         }
 
         isDown = false;
+        clearTimeout(holdDelayTimer);
         clearInterval(holdTimer);
+
+        holdDelayTimer = null;
         holdTimer = null;
 
-        if (holdBubble) {
+        // 只有真正进入长按状态，松开才爆炸
+        if (isHolding && holdBubble) {
             var duration = Date.now() - holdStartTime;
-
             burstHoldBubble(pointerX, pointerY, duration, holdSize);
 
             holdBubble.remove();
             holdBubble = null;
         }
+
+        isHolding = false;
     }
 
     function autoBurstHoldBubble() {
@@ -191,9 +223,14 @@
         holdBubble.remove();
         holdBubble = null;
 
+        clearTimeout(holdDelayTimer);
         clearInterval(holdTimer);
+
+        holdDelayTimer = null;
         holdTimer = null;
+
         isDown = false;
+        isHolding = false;
     }
 
     function playSound() {
@@ -217,16 +254,15 @@
         } catch (e) {}
     }
 
-    function createClickEffect(x, y) {
-        createRipple(x, y, 'normal');
-        createRipple(x, y, 'rainbow');
+    function createSmallClickEffect(x, y) {
+        createRipple(x, y, 'small');
 
-        for (var i = 0; i < config.bubbleCount; i++) {
-            createBubble(x, y, false);
+        for (var i = 0; i < config.clickBubbleCount; i++) {
+            createBubble(x, y, 'small');
         }
 
-        for (var j = 0; j < 8; j++) {
-            createStar(x, y);
+        for (var j = 0; j < 3; j++) {
+            createStar(x, y, 'small');
         }
     }
 
@@ -270,11 +306,11 @@
         createRipple(x, y, 'big');
 
         for (var i = 0; i < count; i++) {
-            createBubble(x, y, false, true);
+            createBubble(x, y, 'burst');
         }
 
         for (var j = 0; j < 12 + power; j++) {
-            createStar(x, y);
+            createStar(x, y, 'burst');
         }
 
         for (var k = 0; k < 8; k++) {
@@ -290,7 +326,7 @@
         } else if (type === 'big') {
             ripple.className = 'rainbow-bubble-ripple rainbow-bubble-ripple-big';
         } else {
-            ripple.className = 'rainbow-bubble-ripple';
+            ripple.className = 'rainbow-bubble-ripple rainbow-bubble-ripple-small';
         }
 
         ripple.style.left = x + 'px';
@@ -299,38 +335,59 @@
 
         document.body.appendChild(ripple);
 
-        removeLater(ripple, type === 'big' ? 1100 : 800);
+        removeLater(ripple, type === 'big' ? 1100 : 760);
     }
 
-    function createBubble(x, y, isFloating, isBurst) {
+    function createBubble(x, y, mode) {
         var bubble = document.createElement('span');
-        bubble.className = isFloating
-            ? 'rainbow-bubble-item rainbow-bubble-float'
-            : 'rainbow-bubble-item';
 
-        if (isBurst) {
+        bubble.className = 'rainbow-bubble-item';
+
+        if (mode === 'float') {
+            bubble.className += ' rainbow-bubble-float';
+        }
+
+        if (mode === 'burst') {
             bubble.className += ' rainbow-bubble-burst';
         }
 
-        var size = isFloating ? random(10, 30) : random(10, 34);
-        var angle = Math.random() * Math.PI * 2;
-        var distance = isBurst ? random(70, 150) : random(32, 95);
+        if (mode === 'small') {
+            bubble.className += ' rainbow-bubble-small';
+        }
 
-        var moveX = Math.cos(angle) * distance;
+        var size;
+        var distance;
+        var moveX;
         var moveY;
+        var angle = Math.random() * Math.PI * 2;
 
-        if (isFloating) {
+        if (mode === 'small') {
+            size = random(7, 18);
+            distance = random(12, config.clickMaxDistance);
+            moveX = Math.cos(angle) * distance;
+            moveY = Math.sin(angle) * distance - random(6, 18);
+        } else if (mode === 'float') {
+            size = random(10, 28);
+            distance = random(18, 52);
+            moveX = Math.cos(angle) * distance + random(-22, 22);
             moveY = -random(80, 170);
-            moveX += random(-28, 28);
-        } else {
+        } else if (mode === 'burst') {
+            size = random(10, 34);
+            distance = random(70, 150);
+            moveX = Math.cos(angle) * distance;
             moveY = Math.sin(angle) * distance - random(22, 58);
+        } else {
+            size = random(10, 30);
+            distance = random(28, 80);
+            moveX = Math.cos(angle) * distance;
+            moveY = Math.sin(angle) * distance - random(18, 46);
         }
 
         var hue = random(0, 360);
-        var delay = random(0, 60);
+        var delay = random(0, 35);
 
-        bubble.style.left = x + random(-5, 5) + 'px';
-        bubble.style.top = y + random(-5, 5) + 'px';
+        bubble.style.left = x + random(-3, 3) + 'px';
+        bubble.style.top = y + random(-3, 3) + 'px';
         bubble.style.width = size + 'px';
         bubble.style.height = size + 'px';
         bubble.style.zIndex = config.zIndex;
@@ -342,7 +399,13 @@
 
         document.body.appendChild(bubble);
 
-        removeLater(bubble, isFloating ? 1500 : 950);
+        if (mode === 'float') {
+            removeLater(bubble, 1500);
+        } else if (mode === 'small') {
+            removeLater(bubble, 620);
+        } else {
+            removeLater(bubble, 950);
+        }
     }
 
     function createFloatingBubbles(x, y, count) {
@@ -350,21 +413,22 @@
             createBubble(
                 x + random(-20, 20),
                 y + random(-10, 16),
-                true,
-                false
+                'float'
             );
         }
     }
 
-    function createStar(x, y) {
+    function createStar(x, y, mode) {
         var star = document.createElement('span');
-        star.className = 'rainbow-bubble-star';
+        star.className = mode === 'small'
+            ? 'rainbow-bubble-star rainbow-bubble-star-small'
+            : 'rainbow-bubble-star';
 
         var angle = Math.random() * Math.PI * 2;
-        var distance = random(34, 105);
+        var distance = mode === 'small' ? random(14, 38) : random(34, 105);
 
         var moveX = Math.cos(angle) * distance;
-        var moveY = Math.sin(angle) * distance - random(18, 55);
+        var moveY = Math.sin(angle) * distance - (mode === 'small' ? random(5, 16) : random(18, 55));
         var hue = random(0, 360);
 
         star.style.left = x + 'px';
@@ -376,7 +440,7 @@
 
         document.body.appendChild(star);
 
-        removeLater(star, 760);
+        removeLater(star, mode === 'small' ? 520 : 760);
     }
 
     function createTinyColorSpark(x, y) {
@@ -454,6 +518,15 @@
                 animation: rainbowBubbleRipple 760ms ease-out forwards;
             }
 
+            /* 普通点击水波纹：缩小范围 */
+            .rainbow-bubble-ripple-small {
+                width: 18px;
+                height: 18px;
+                border-width: 1px;
+                opacity: 0.86;
+                animation: rainbowBubbleSmallRipple 520ms ease-out forwards;
+            }
+
             .rainbow-bubble-ripple-color {
                 width: 34px;
                 height: 34px;
@@ -513,6 +586,15 @@
                     rainbowBubbleHue 1300ms linear infinite;
             }
 
+            /* 普通快速点击泡泡：更轻、更小、更短 */
+            .rainbow-bubble-small {
+                opacity: 0.86;
+                filter: saturate(1.08);
+                animation:
+                    rainbowBubbleSmallFly 560ms cubic-bezier(.18,.82,.35,1) forwards,
+                    rainbowBubbleHue 1200ms linear infinite;
+            }
+
             .rainbow-bubble-item::before {
                 content: "";
                 position: absolute;
@@ -560,6 +642,15 @@
                     0 0 30px hsla(calc(var(--hue) + 100), 100%, 70%, 0.45);
                 animation:
                     rainbowBubbleStar 720ms ease-out forwards,
+                    rainbowBubbleHue 900ms linear infinite;
+            }
+
+            .rainbow-bubble-star-small {
+                width: 5px;
+                height: 5px;
+                opacity: 0.8;
+                animation:
+                    rainbowBubbleSmallStar 500ms ease-out forwards,
                     rainbowBubbleHue 900ms linear infinite;
             }
 
@@ -673,6 +764,17 @@
                     rainbowBubbleHue 900ms linear infinite;
             }
 
+            @keyframes rainbowBubbleSmallRipple {
+                0% {
+                    opacity: 0.78;
+                    transform: translate(-50%, -50%) scale(0.18);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(2.35);
+                }
+            }
+
             @keyframes rainbowBubbleRipple {
                 0% {
                     opacity: 0.96;
@@ -692,6 +794,25 @@
                 100% {
                     opacity: 0;
                     transform: translate(-50%, -50%) scale(5.8) rotate(90deg);
+                }
+            }
+
+            @keyframes rainbowBubbleSmallFly {
+                0% {
+                    opacity: 0.88;
+                    transform: translate(-50%, -50%) scale(0.16);
+                }
+                50% {
+                    opacity: 0.78;
+                }
+                100% {
+                    opacity: 0;
+                    transform:
+                        translate(
+                            calc(-50% + var(--move-x)),
+                            calc(-50% + var(--move-y))
+                        )
+                        scale(0.92);
                 }
             }
 
@@ -749,6 +870,23 @@
                             calc(-50% + var(--move-y))
                         )
                         scale(1.35);
+                }
+            }
+
+            @keyframes rainbowBubbleSmallStar {
+                0% {
+                    opacity: 0.9;
+                    transform: translate(-50%, -50%) rotate(45deg) scale(0.22);
+                }
+                100% {
+                    opacity: 0;
+                    transform:
+                        translate(
+                            calc(-50% + var(--move-x)),
+                            calc(-50% + var(--move-y))
+                        )
+                        rotate(150deg)
+                        scale(0.85);
                 }
             }
 
